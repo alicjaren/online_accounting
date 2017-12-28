@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import org.springframework.web.bind.annotation.GetMapping;
+//import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class WelcomeController {
@@ -19,37 +19,42 @@ public class WelcomeController {
 //        return "welcome";
 //    }
 
-    @GetMapping("/")
+    @RequestMapping("/")
     public String home1() {
         return "/home";
     }
 
-    @GetMapping("/home")
+    @RequestMapping("/home")
     public String home() {
         return "/home";
     }
 
-    @GetMapping("/admin")
+    @RequestMapping("/admin")
     public String admin() {
         return "/admin";
     }
 
-    @GetMapping("/user")
+    @RequestMapping("/user")
     public String user() {
         return "/user";
     }
 
-    @GetMapping("/about")
+    @RequestMapping("/about")
     public String about() {
         return "/about";
     }
 
-    @GetMapping("/login")
+    @RequestMapping("/login")
     public String login() {
         return "/login";
     }
 
-    @GetMapping("/403")
+    @RequestMapping("/logout")
+    public String logout(){
+        return "/login";
+    }
+
+    @RequestMapping("/403")
     public String error403() {
         return "/error/403";
     }
