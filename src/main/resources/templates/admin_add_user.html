@@ -12,7 +12,75 @@
     <div class="starter-template">
         <h1>Admin page</h1>
 
-        <h1>Dodawanie nowego użytkownika</h1>
+        <form th:action="@{/admin/users/add}" method="post">
+            <h1>Dodawanie nowego użytkownika</h1>
+            <ul>
+                <li>
+                    <label for="username" class="uname" data-icon="u" > Login użytkownika </label>
+                    <input id="username" name="username" required="required" type="text" placeholder="login"/>
+                </li>
+
+                <li>
+                    <label for="password" class="upasswd" data-icon="p"> Domyślne hasło </label>
+                    <input id="password" name="password" required="required" type="password" placeholder="hasło" />
+                </li>
+
+                <li>
+                    <label for="password2" class="upasswd" data-icon="p"> Powtórzenie hasła </label>
+                    <input id="password2" name="password2" required="required" type="password" placeholder="hasło" />
+                </li>
+
+                <li>
+                    <label for="email" class="uname" data-icon="u" > Adres e-mail </label>
+                    <input id="email" name="email" required="required" type="email" placeholder="email"/>
+                </li>
+
+                <li>
+                    <label for="name" class="uname" data-icon="u" > Imiona </label>
+                    <input id="name" name="name" required="required" type="text" placeholder="imiona"/>
+                </li>
+
+                <li>
+                    <label for="surname" class="uname" data-icon="u" > Nazwisko </label>
+                    <input id="surname" name="surname" required="required" type="text" placeholder="nazwisko"/>
+                </li>
+
+                <li>
+                    <label for="address" class="uname" data-icon="u" > Adres </label>
+                    <input id="address" name="address" required="required" type="text" placeholder="adres"/>
+                </li>
+
+                <li>
+                    <label for="NIP" class="uname" data-icon="u" > NIP </label>
+                    <input id="NIP" name="NIP" required="required" type="text" placeholder="NIP" maxlength="10" size="10"/>
+                </li>
+
+                <li>
+                    <label for="dateOfBirth" class="uname" data-icon="u" > Data urodzenia </label>
+                    <input id="dateOfBirth" name="dateOfBirth" required="required" type="date" placeholder="data urodzenia"/>
+                </li>
+
+                <li>
+                    <label for="phoneNr" class="uname" data-icon="u" > Numer telefonu </label>
+                    <input id="phoneNr" name="phoneNr" required="required" type="text" maxlength="9" placeholder="numer telefonu"/>
+                </li>
+
+                <li>
+                    <label for="nameOfRevenue" class="uname" data-icon="u" > Nazwa Urzędu Skarbowego </label>
+                    <input id="nameOfRevenue" name="nameOfRevenue" required="required" type="text" maxlength="70" placeholder="nazwa Urzędu Skarbowego"/>
+                </li>
+
+                <li>
+                    <input type="submit" class="button" value="Zapisz"/>
+                </li>
+
+            </ul>
+
+            <p>
+
+            </p>
+        </form>
+
         <form th:action="@{/logout}" method="post">
             <input type="submit" value="Sign Out"/>
         </form>

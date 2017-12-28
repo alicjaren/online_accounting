@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.example.demo.users.dao.UserDao;
 import com.example.demo.users.model.UserRole;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -39,7 +40,14 @@ public class MyUserDetailsService implements UserDetailsService {
 
     }
 
-    // Converts com.mkyong.users.model.User user to
+//    @Transactional
+//    public boolean userRegistration(com.example.demo.users.model.User user){
+//       userDao.newUserRegistration(user);
+//       return true;
+//    }
+
+
+    // Converts users.model.User user to
     // org.springframework.security.core.userdetails.User
     private User buildUserForAuthentication(com.example.demo.users.model.User user,
                                             List<GrantedAuthority> authorities) {
