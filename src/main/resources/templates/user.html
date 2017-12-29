@@ -13,6 +13,11 @@
         <h1>User page (Spring Security protected)</h1>
 
         <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+        <div th:if="${error} != null">
+            <div class="alert alert-info">
+                <span th:text="${error}"></span>
+            </div>
+        </div>
         <form th:action="@{/logout}" method="post">
             <input type="submit" value="Sign Out"/>
         </form>

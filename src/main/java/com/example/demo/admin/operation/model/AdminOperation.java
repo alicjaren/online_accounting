@@ -10,49 +10,123 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+
 import java.util.logging.Logger;
 
 public class AdminOperation {
 
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder = new PasswordEncoder() {
-//                @Override
-//        public String encode(CharSequence charSequence) {
-//            return null;
-//        }
-//
-//        @Override
-//        public boolean matches(CharSequence charSequence, String s) {
-//            return false;
-//        }
-//    };
-
-    @Autowired
-    private UserDao userDao;
-
-
     @Transactional
-    public boolean addNewUser(String login, String password, String password2, String email,
+    public String addNewUser(String login, String password, String password2, String email,
                               String name, String surname, String address, String NIP,
                               String dateOfBirth, String phoneNr, String nameOfRevenue){
         System.out.println("Dodaje nowego usera!");
-        boolean result = false;
+        String result = "SUCCESS";
+
         Validator validator = new Validator();
-        if (validator.loginIsUnique(login)){
+
+        //validate login
+        if (validator.loginIsUnique(login)) {
             LOGGER.info("Login is unique");
-
-            SpringSecurityConfig security = new SpringSecurityConfig();
-            PasswordEncoder passwordEncoder = security.passwordEncoder();
-            String hashPassword = passwordEncoder.encode(password);
-
-            User user = new User(login, hashPassword, true);
-            UserRole userRole = new UserRole(user, "ROLE_USER");
-            UserDaoImpl userDao = new UserDaoImpl();
-            result = userDao.newUserRegistration(user, userRole);
         }
+        else{
+            result = "Taki login juz instnieje. Proszę podać unikalny login.";
+            LOGGER.info("Such login: " + login +  " already exists in DB");
+            return result;
+        }
+
+        //validate password
+        if(validator.passwordIsStrong(password)){
+            LOGGER.info("Password is enough strong");
+        }
+        else{
+            result = "Hasło zbyt słabe. Wymagane min 8 znaków: 1 mała litera, 1 wielka, 1 cyfra oraz " +
+                    "1 znak specjalny";
+            LOGGER.info("Password too leak");
+            return result;
+        }
+        if(validator.passwordsAreTheSame(password, password2)){
+            LOGGER.info("Passwords are the same");
+        }
+        else{
+            result = "Hasła muszą być identyczne";
+            LOGGER.info("Password aren't the same");
+            return result;
+        }
+
+        //validate name
+        if(validator.namesAreValid(name)){
+            LOGGER.info("Names are correct");
+        }
+        else{
+            result = "Imiona powinny składać się wyłącznie z liter.";
+            LOGGER.info("Unexpected signs in names");
+            return result;
+        }
+
+        //validate surname
+        if(validator.surnamesAreValid(surname)){
+            LOGGER.info("Names are correct");
+        }
+        else{
+            result = "Imiona powinny składać się wyłącznie z liter.";
+            LOGGER.info("Unexpected signs in names");
+            return result;
+        }
+
+        //validate email
+        if(validator.emailIsValid(email)){
+            LOGGER.info("Email address is valid");
+        }
+        else{
+            result = "Taki adres email nie istnieje";
+            LOGGER.info("Email address are not valid.");
+            return result;
+        }
+
+        //validate NIP
+        if(validator.NIPIsValid(NIP)){
+            LOGGER.info("NIP is ok");
+        }
+        else{
+            result = "Błędny NIP";
+            LOGGER.info("NIP is not correct");
+            return result;
+        }
+
+        //validate phone number
+        if(validator.phoneNrIsValid(phoneNr)){
+            LOGGER.info("Phone number is valid");
+        }
+        else{
+            result = "Numer telefonu niepoprawny. Wymagane 9 cyfr.";
+            LOGGER.info("Phone number is not valid");
+            return result;
+        }
+
+        //validate date of birth:
+        if(validator.dateOfBirthIsValid(dateOfBirth)){
+            LOGGER.info("Date of birth in valid format");
+        }
+        else{
+            result = "Date of birth has invalid format. Required: RRRR-MM-DD";
+            LOGGER.info("Date of birth has not valid format");
+            return result;
+        }
+
+        SpringSecurityConfig security = new SpringSecurityConfig();
+        PasswordEncoder passwordEncoder = security.passwordEncoder();
+        String hashPassword = passwordEncoder.encode(password);
+
+        User user = new User(login, hashPassword, true);
+        UserRole userRole = new UserRole(user, "ROLE_USER");
+        UserDaoImpl userDao = new UserDaoImpl();
+        if (!userDao.newUserRegistration(user, userRole)){
+            result = "Przepraszamy. Błąd podczas połączenia z bazą danych.";
+            LOGGER.info("Error by connection with MySQL DB");
+        }
+
         return result;
     }
 }

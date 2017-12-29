@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
 import com.example.demo.admin.operation.model.AdminOperation;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,11 +20,18 @@ public class AdminController {
 
     @RequestMapping("/admin/users/list")
     public String usersList() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String role = auth.getAuthorities().toString();
+        LOGGER.info("rola usera: " + role);
         return "/admin_user_list";
     }
 
     @RequestMapping("/admin/users/add")
-    public String addUsersRenderForm() {
+    public String addUsersRenderForm(Model model) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String role = auth.getAuthorities().toString();
+        LOGGER.info("rola usera: " + role);
         return "/admin_add_user";
     }
 
@@ -34,21 +43,25 @@ public class AdminController {
                           @RequestParam("dateOfBirth") String dateOfBirth, @RequestParam("phoneNr") String phoneNr,
                           @RequestParam("nameOfRevenue") String nameOfRevenue,  Model model) {
 
-        LOGGER.info("Rejestracja dla loginu: " + login + "\npasswords: " + password + " " + password2
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String role = auth.getAuthorities().toString();
+        LOGGER.info("rola usera: " + role);
+        LOGGER.info("Registration for: login: " + login + "\npasswords: " + password + " " + password2
             + " name: " +  " email: " + email + name + " surname: " + surname + " \naddress: "
                 + address + " dateOfBirth: " + dateOfBirth + " NIP: " + NIP + " phoneNr: " + phoneNr +
                 " \nrevenue: " + nameOfRevenue);
 
         AdminOperation admin = new AdminOperation();
-        
-        if (admin.addNewUser(login, password, password2, email, name, surname, address, NIP, dateOfBirth,
-                phoneNr, nameOfRevenue)){
+        String result  = admin.addNewUser(login, password, password2, email, name, surname, address, NIP, dateOfBirth,
+                phoneNr, nameOfRevenue);
+        if (result.equals("SUCCESS")){
             model.addAttribute("addedUser", "Dodano nowego użytkownika.");
             return "/admin";
         }
-
-        model.addAttribute("failedAdded", "Błąd przy dodawaniu nowego użytkownika.");
-        return "/admin";
+        else{
+            model.addAttribute("failedAdded", result);
+            return "/admin";
+        }
     }
 }
 

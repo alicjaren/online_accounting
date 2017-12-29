@@ -40,12 +40,6 @@ public class MyUserDetailsService implements UserDetailsService {
 
     }
 
-//    @Transactional
-//    public boolean userRegistration(com.example.demo.users.model.User user){
-//       userDao.newUserRegistration(user);
-//       return true;
-//    }
-
 
     // Converts users.model.User user to
     // org.springframework.security.core.userdetails.User
