@@ -82,10 +82,10 @@ public class ValidatorTest {
 
     @Test
     public void testAddNewUser(){
-        /*assertEquals(admin.addNewUser("userNew", "12@qwWW1qq","12@qwWW1qq",
+        assertEquals(admin.addNewUser("userNew123", "12@qwWW1qq","12@qwWW1qq",
                 "userNew@mail.pl", "Adaś Michał", "Kowalski-Myśliwski",
                 "ul.Kwiatowa 10 06-400 Ciechanów", "1234567890","1988-01-09",
-                "333444555","Urząd Skarbowy w Ciechanowie") , "SUCCESS");*/
+                "333444555","Urząd Skarbowy w Ciechanowie") , "SUCCESS");
 
         assertEquals(admin.addNewUser("userNew", "12@qwWW1qq","12@qwWW1qq",
                 "userNew@mail.pl", "Adaś Michał", "Kowalski-Myśliwski",

@@ -1,6 +1,8 @@
 package com.example.demo.admin.operation.model;
 
 import com.example.demo.config.SpringSecurityConfig;
+import com.example.demo.persons.dao.PersonDaoImpl;
+import com.example.demo.persons.model.Person;
 import com.example.demo.users.dao.UserDao;
 import com.example.demo.users.dao.UserDaoImpl;
 import com.example.demo.users.model.User;
@@ -11,6 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Logger;
 
 public class AdminOperation {
@@ -121,8 +126,25 @@ public class AdminOperation {
 
         User user = new User(login, hashPassword, true);
         UserRole userRole = new UserRole(user, "ROLE_USER");
+
+        if (dateOfBirth.contains("-")){
+            String [] parts = dateOfBirth.split("-");
+            dateOfBirth = parts[0] + "/" + parts[1] + "/" + parts[2];
+        }
+        Date date;
+        try {
+            date = new SimpleDateFormat("yyyy/MM/dd").parse(dateOfBirth);
+        }catch(ParseException pe){
+            LOGGER.info("Error by date parsing");
+            return"Date of birth has invalid format. Required: RRRR-MM-DD";
+        }
+
+        Person person = new Person(login, name, surname, address, email, Long.valueOf(NIP),
+                Long.valueOf(phoneNr), date, nameOfRevenue, user);
+
         UserDaoImpl userDao = new UserDaoImpl();
-        if (!userDao.newUserRegistration(user, userRole)){
+        PersonDaoImpl personDao = new PersonDaoImpl();
+        if (!userDao.newUserRegistration(user, userRole) || !personDao.addNewPerson(person)){
             result = "Przepraszamy. Błąd podczas połączenia z bazą danych.";
             LOGGER.info("Error by connection with MySQL DB");
         }

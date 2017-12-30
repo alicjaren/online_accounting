@@ -26,7 +26,7 @@ public class DatabaseConfig {
     public SessionFactory sessionFactory() {
         LocalSessionFactoryBuilder builder =
                 new LocalSessionFactoryBuilder(dataSource());
-        builder.scanPackages("com.example.demo.users.model")
+        builder.scanPackages("com.example.demo.users.model", "com.example.demo.persons.model")
                 .addProperties(getHibernateProperties());
 
         return builder.buildSessionFactory();
@@ -36,8 +36,10 @@ public class DatabaseConfig {
         Properties prop = new Properties();
         prop.put("hibernate.format_sql", "true");
         prop.put("hibernate.show_sql", "true");
-        prop.put("hibernate.dialect",
-                "org.hibernate.dialect.MySQL5Dialect");
+        prop.put("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+        prop.put("hibernate.connection.CharSet", "utf-8");
+        prop.put("hibernate.connection.useUnicode", true);
+        prop.put("hibernate.connection.characterEncoding", "utf-8");
         return prop;
     }
 

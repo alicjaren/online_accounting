@@ -1,13 +1,10 @@
 package com.example.demo.users.model;
 
+import com.example.demo.persons.model.Person;
+
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "users", catalog = "test")
@@ -16,6 +13,7 @@ public class User {
     private String password;
     private boolean enabled;
     private Set<UserRole> userRole = new HashSet<UserRole>(0);
+    private Person person;
 
     public User() {
     }
@@ -34,9 +32,17 @@ public class User {
         this.userRole = userRole;
     }
 
+
+    public User(String username, String password, boolean enabled, Person person) {
+
+        this.username = username;
+        this.password = password;
+        this.enabled = enabled;
+        this.person = person;
+    }
+
     @Id
-    @Column(name = "username", unique = true,
-            nullable = false, length = 45)
+    @Column(name = "username", unique = true, nullable = false, length = 45)
     public String getUsername() {
         return this.username;
     }
@@ -45,8 +51,18 @@ public class User {
         this.username = username;
     }
 
-    @Column(name = "password",
-            nullable = false, length = 60)
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+
+    @Column(name = "password", nullable = false, length = 60)
     public String getPassword() {
         return this.password;
     }

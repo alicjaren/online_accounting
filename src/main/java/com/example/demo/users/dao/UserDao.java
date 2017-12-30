@@ -7,5 +7,6 @@ public interface UserDao {
 
     User findByUserName(String username);
     boolean newUserRegistration(User user, UserRole userRole);
+    boolean isUserInDB(String userName);
 
 }
