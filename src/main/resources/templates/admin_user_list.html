@@ -12,7 +12,22 @@
     <div class="starter-template">
         <h1>Admin page</h1>
 
-        <h1>Lista użytkowników</h1>
+        <div th:if="${not #lists.isEmpty(persons)}">
+            <h1>Lista użytkowników</h1>
+            <table class="persons-table">
+                <tr>
+                    <th>Login</th>
+                    <th>Imiona</th>
+                    <th>Nazwisko</th>
+                </tr>
+                <tr th:each="person: ${persons}">
+                    <td th:text="${person.username}"></td>
+                    <td th:text="${person.name}"></td>
+                    <td th:text="${person.surname}"></td>
+                </tr>
+            </table>
+        </div>
+
         <form th:action="@{/logout}" method="post">
             <input type="submit" value="Sign Out"/>
         </form>

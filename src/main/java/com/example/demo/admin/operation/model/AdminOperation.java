@@ -15,12 +15,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Logger;
 
 public class AdminOperation {
 
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
+    private PersonDaoImpl personDao = new PersonDaoImpl();
+    private UserDaoImpl userDao = new UserDaoImpl();
+    private Validator validator = new Validator();
 
     @Transactional
     public String addNewUser(String login, String password, String password2, String email,
@@ -28,8 +33,6 @@ public class AdminOperation {
                               String dateOfBirth, String phoneNr, String nameOfRevenue){
         System.out.println("Dodaje nowego usera!");
         String result = "SUCCESS";
-
-        Validator validator = new Validator();
 
         //validate login
         if (validator.loginIsUnique(login)) {
@@ -151,4 +154,42 @@ public class AdminOperation {
 
         return result;
     }
+
+     public List<Person> getPersonsList(){
+         return personDao.getPersonsList();
+     }
+
+     public boolean deleteUser(String username){
+          return (personDao.deletePerson(username) && userDao.deleteUserRoles(username)
+                  && userDao.deleteUser(username));
+     }
+
+     /*return information about error or SUCCESS if transaction was correct*/
+     public String changePassword(String username, String currentPassword, String newPassword, String newReplacedPassword){
+         if(!userDao.isUserInDB(username)){
+             LOGGER.info("Such username: " + username +  " doesn't exist in DB");
+             return "Brak takiego użytkownika w bazie.";
+         }
+
+         if(!userDao.isCorrectPassword(username, currentPassword)){
+             LOGGER.info("Password is incorrect");
+             return "Podane obecne hasło nie jest poprawne.";
+         }
+
+         if(!validator.passwordsAreTheSame(newPassword, newReplacedPassword)){
+             LOGGER.info("New password and new replaced password aren't the same");
+             return "Nowe hasło i jego powtórzenie nie są zgodne.";
+         }
+         if(!validator.passwordIsStrong(newPassword)){
+             LOGGER.info("New password isn't enough strong");
+             return "Hasło zbyt słabe. Wymagane min 8 znaków: 1 mała litera, 1 wielka, 1 cyfra oraz " +
+             "1 znak specjalny";
+         }
+         if(!userDao.changePassword(username, newPassword)){
+             LOGGER.info("Error by connection with DB");
+             return"Przepraszamy. Błąd podczas połączenia z bazą dancyh.";
+         }
+         return "SUCCESS";
+     }
+
 }
