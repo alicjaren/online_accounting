@@ -82,5 +82,12 @@ public class AdminController {
         return "/admin_user_list";
     }
 
+    @RequestMapping("/admin/password/changing")
+    public String getChangingPasswordForm(Model model){
+        model.addAttribute("admin", "true");
+        return "/change_password";
+    }
+
+
 }
 

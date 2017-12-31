@@ -25,6 +25,12 @@
             </div>
         </div>
 
+        <div th:if="${result} != null">
+            <div class="alert alert-info">
+                <span th:text="${result}"></span>
+            </div>
+        </div>
+
         <form th:action="@{/logout}" method="post">
             <input type="submit" value="Sign Out"/>
         </form>
