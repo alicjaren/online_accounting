@@ -26,7 +26,8 @@ public class DatabaseConfig {
     public SessionFactory sessionFactory() {
         LocalSessionFactoryBuilder builder =
                 new LocalSessionFactoryBuilder(dataSource());
-        builder.scanPackages("com.example.demo.users.model", "com.example.demo.persons.model")
+        builder.scanPackages("com.example.demo.users.model", "com.example.demo.persons.model",
+                "com.example.demo.reckoning.model", "com.example.demo.invoices.model")
                 .addProperties(getHibernateProperties());
 
         return builder.buildSessionFactory();

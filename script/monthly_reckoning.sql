@@ -1,0 +1,18 @@
+CREATE TABLE test.monthly_reckonings (
+  id_monthly_reckoning INT(11) NOT NULL AUTO_INCREMENT,
+  name varchar(10) NOT NULL,
+  for_next_month INT(30) NOT NULL,
+  for_revenue INT(30) NOT NULL,
+  refund_25_days  INT(30) NOT NULL,
+  refund_60_days INT(30) NOT NULL,
+  refund_180_days INT(30)  NOT NULL,
+  username varchar(45) NOT NULL ,
+  trade_record INT(11) NOT NULL ,
+  purchase_record INT(11) NOT NULL ,
+  PRIMARY KEY (id_monthly_reckoning),
+  KEY fk_monthly_reckoning_username (username),
+  CONSTRAINT fk_monthly_reckoning_username FOREIGN KEY (username) REFERENCES users (username),
+  KEY fk_monthly_reckoning_trade_record (trade_record),
+  CONSTRAINT fk_monthly_reckoning_trade_record FOREIGN KEY (trade_record) REFERENCES trade_records (id_trade_record),
+  KEY fk_monthly_reckoning_purchase_record (purchase_record),
+  CONSTRAINT fk_monthly_reckoning_purchase_record FOREIGN KEY (purchase_record) REFERENCES purchase_records (id_purchase_record));

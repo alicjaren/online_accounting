@@ -2,9 +2,13 @@ package com.example.demo.controller;
 
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 //import org.springframework.web.bind.annotation.GetMapping;
 
@@ -27,7 +31,11 @@ public class WelcomeController {
     }
 
     @RequestMapping("/user")
-    public String user() {
+    public String user(HttpServletRequest request) {
+       /* Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if(auth.isAuthenticated()){
+            return "/user";
+        }*/
         return "/user";
     }
 

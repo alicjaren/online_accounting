@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.admin.operation.model.AdminOperation;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,5 +51,16 @@ public class UserController {
             model.addAttribute("error", result);
             return "/change_password";
         }
+    }
+
+    @RequestMapping("/user/invoice/adding")
+    public String getAddingInvoiceForm(){
+        return "/add_invoice";
+    }
+
+    @RequestMapping(value = "user/invoice/adding", method = RequestMethod.POST)
+    public String addInvoice(Model model){
+        model.addAttribute("result", "Dodano nową fakturę");
+        return "/user";
     }
 }

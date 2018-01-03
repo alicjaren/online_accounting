@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="fragments/header :: header-css"/>
-    <title>Zmiana hasła</title>
+    <title>Wprowadzanie faktury</title>
 </head>
 <body>
 
@@ -17,7 +17,7 @@
 <div class="container">
 
     <div class="starter-template">
-        <h1>Zmiana hasła</h1>
+        <h1>Nowa faktura</h1>
 
         <div th:if="${error} != null">
             <div class="alert alert-info">
@@ -25,8 +25,7 @@
             </div>
         </div>
 
-        <form th:action="@{/user/password/changing}" method="post">
-            <h1>Formularz zmiany hasła</h1>
+        <form th:action="@{/user/invoice/adding}" method="post">
             <ul>
                 <li>
                     <label for="currentPassword" class="upasswd" data-icon="p"> Obecne hasło </label>
@@ -44,7 +43,7 @@
                 </li>
 
                 <li>
-                    <input type="submit" class="button" value="Zmień hasło"/>
+                    <input type="submit" class="button" value="Zapisz"/>
                 </li>
 
             </ul>
