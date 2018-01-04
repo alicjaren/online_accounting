@@ -92,6 +92,19 @@
 			<version>4.3.12.RELEASE</version>
 		</dependency>
 
+		<!--Hibernate - new to seriazible -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-c3p0</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
+
 
 		<!-- MySql Driver -->
 		<dependency>

@@ -14,7 +14,7 @@ public interface RecordDao {
 
     boolean addPurchaseRecord(PurchaseRecord purchaseRecord);
 
-    TradeRecord getTradeRecord(String name);
+    TradeRecord getTradeRecord(String name, String username);
 
     PurchaseRecord getPurchaseRecord(String name);
 

@@ -5,8 +5,10 @@ import com.example.demo.reckoning.model.MonthlyReckoning;
 
 public interface MonthlyReckoningDao {
 
-    boolean isMonthlyReckoningInDBByName(String name);
+    boolean isMonthlyReckoningInDBByName(String reckoningName, String userName);
 
     boolean addMonthlyReckoning(MonthlyReckoning monthlyReckoning);
+
+    MonthlyReckoning getMonthlyReckoning(String userName, String reckoningName);
 
 }

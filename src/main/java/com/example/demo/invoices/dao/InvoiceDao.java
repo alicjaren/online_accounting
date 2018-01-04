@@ -8,4 +8,8 @@ public interface InvoiceDao {
     boolean addTradeInvoice(TradeInvoice tradeInvoice);
 
     boolean addPurchaseInvoice(PurchaseInvoice purchaseInvoice);
+
+    boolean isPurchaseInvoiceInDB(String invoiceNumber, long partnerNIP);
+
+    boolean isTradeInvoiceInDB(String invoiceNumber, String username);
 }

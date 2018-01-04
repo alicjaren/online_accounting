@@ -2,6 +2,7 @@ package com.example.demo.persons.dao;
 
 import com.example.demo.config.DatabaseConfig;
 import com.example.demo.persons.model.Person;
+import com.example.demo.service.AddingToDB;
 import com.example.demo.users.dao.UserDaoImpl;
 import com.example.demo.users.model.User;
 import org.hibernate.Session;
@@ -17,6 +18,7 @@ import java.util.logging.Logger;
 public class PersonDaoImpl implements PersonDao {
 
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
+    private AddingToDB addingToDB = new AddingToDB();
 
     @Override
     public Person findByUserName(String username) {
@@ -44,7 +46,8 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public boolean addNewPerson(Person person) {
-        DatabaseConfig dbConfig = new DatabaseConfig();
+        return addingToDB.addToDB(person);
+        /*DatabaseConfig dbConfig = new DatabaseConfig();
         SessionFactory factory = dbConfig.sessionFactory();
         Session session = factory.openSession();
         try {
@@ -57,7 +60,7 @@ public class PersonDaoImpl implements PersonDao {
             //session.getTransaction().rollback();
             LOGGER.info("Connection with DB error");
             return false;
-        }
+        }*/
     }
 
     @Override

@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 
 import com.example.demo.config.DatabaseConfig;
 import com.example.demo.config.SpringSecurityConfig;
+import com.example.demo.service.AddingToDB;
 import com.example.demo.users.model.User;
 import com.example.demo.users.model.UserRole;
 import org.hibernate.*;
@@ -29,6 +30,7 @@ public class UserDaoImpl implements UserDao {
     @Autowired
     private SessionFactory sessionFactory;
     private Logger logger = Logger.getAnonymousLogger();
+    private AddingToDB addingToDB = new AddingToDB();
 
     @SuppressWarnings("unchecked")
     public User findByUserName(String username) {
@@ -49,7 +51,8 @@ public class UserDaoImpl implements UserDao {
 
     public boolean newUserRegistration(User user, UserRole userRole){
 
-        DatabaseConfig dbConfig = new DatabaseConfig();
+        return addingToDB.addToDB(user) && addingToDB.addToDB(userRole);
+        /*DatabaseConfig dbConfig = new DatabaseConfig();
         SessionFactory factory = dbConfig.sessionFactory();
         Session session = factory.openSession();
         try {
@@ -63,7 +66,7 @@ public class UserDaoImpl implements UserDao {
             //session.getTransaction().rollback();
             System.out.println("Connection with DB error");
             return false;
-        }
+        }*/
     }
 
     public boolean isUserInDB(String userName){
@@ -185,6 +188,30 @@ public class UserDaoImpl implements UserDao {
         }
         session.close();
         return users.get(0);
+    }
+
+    @Override
+    public User getUserByNIP(long NIP){
+        DatabaseConfig dbConfig = new DatabaseConfig();
+        SessionFactory factory = dbConfig.sessionFactory();
+        Session session = factory.openSession();
+        List<User> users = new ArrayList<>();
+
+        try{
+            users = session.createQuery("from User join Person p where p.NIP=?")
+                    .setParameter(0, NIP).list();
+        }catch(GenericJDBCException e){
+            logger.info("Connection with DB error");
+            return null;
+        }
+        session.close();
+        if (users.isEmpty()){
+            logger.info("User with NIP: " + NIP + " doesn't exists!");
+            return null;
+        }
+        else{
+            return users.get(0);
+        }
     }
 
     @Override

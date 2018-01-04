@@ -28,6 +28,7 @@ public class TradeRecord {
 
     }
 
+
     public TradeRecord(String name, double sumNet23, double sumNet8, double sumNet5, double sumVat23, double sumVat8,
                        double sumVat5, double sumGross) {
         this.name = name;

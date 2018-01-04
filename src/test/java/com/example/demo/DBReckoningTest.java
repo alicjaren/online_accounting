@@ -37,6 +37,10 @@ public class DBReckoningTest {
         MonthlyReckoning monthlyReckoning = new MonthlyReckoning("12/2017", 20, 0,
                 0, 0, 0, user, tradeRecord, purchaseRecord);
         assertFalse(monthlyReckoningDao.addMonthlyReckoning(monthlyReckoning)); //such reckoning already exists
+
+        assertTrue(monthlyReckoningDao.isMonthlyReckoningInDBByName("12/2017", "user1"));
+        assertFalse(monthlyReckoningDao.isMonthlyReckoningInDBByName("12/2017", "user"));
+        assertFalse(monthlyReckoningDao.isMonthlyReckoningInDBByName("11/2017", "user1"));
     }
 
 }

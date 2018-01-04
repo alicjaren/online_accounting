@@ -2,6 +2,7 @@ package com.example.demo.invoices.model;
 
 
 import com.example.demo.reckoning.model.TradeRecord;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -26,8 +27,10 @@ public class TradeInvoice {
     private double vat8;
     private double vat5;
     private double gross;
-    private LocalDateTime dateCreated;
-    private LocalDateTime dateChanged;
+    //private LocalDateTime dateCreated;
+    private Date dateCreated;
+    private Date dateChanged;
+    //private LocalDateTime dateChanged;
     private TradeRecord tradeRecord;
 
 
@@ -171,23 +174,26 @@ public class TradeInvoice {
         this.gross = gross;
     }
 
-    //@Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_created")
-    public LocalDateTime getDateCreated() {
+    //@Type(type = "com.example.demo.invoices.model.LocalDateHibernateUserType")
+    //@Temporal(TemporalType.TIMESTAMP)
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(LocalDateTime dateCreated) {
+    public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-   // @Temporal(TemporalType.TIMESTAMP)
+
     @Column(name="date_changed")
-    public LocalDateTime getDateChanged() {
+    //@Type(type = "com.example.demo.invoices.model.LocalDateHibernateUserType")
+    //@Temporal(TemporalType.TIMESTAMP)
+    public Date getDateChanged() {
         return dateChanged;
     }
 
-    public void setDateChanged(LocalDateTime dateChanged) {
+    public void setDateChanged(Date dateChanged) {
         this.dateChanged = dateChanged;
     }
 

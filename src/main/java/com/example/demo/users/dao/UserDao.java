@@ -21,6 +21,8 @@ public interface UserDao {
 
     User getUser(String userName);
 
+    User getUserByNIP(long NIP);
+
     boolean isCorrectPassword(String username, String password);
 
     boolean changePassword(String username, String newPassword);
