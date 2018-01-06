@@ -139,7 +139,7 @@ public class AdminOperation {
             date = new SimpleDateFormat("yyyy/MM/dd").parse(dateOfBirth);
         }catch(ParseException pe){
             LOGGER.info("Error by date parsing");
-            return"Date of birth has invalid format. Required: RRRR-MM-DD";
+            return"Date of birth has invalid format. Required: RRRR/MM/DD";
         }
 
         Person person = new Person(login, name, surname, address, email, Long.valueOf(NIP),

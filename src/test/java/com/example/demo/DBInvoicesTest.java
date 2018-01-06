@@ -12,6 +12,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Logger;
 
+import static junit.framework.TestCase.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class DBInvoicesTest {
@@ -23,11 +27,11 @@ public class DBInvoicesTest {
     //@Test
     public void testAddTradeInvoice(){
         TradeRecord tradeRecord = recordDao.getTradeRecord("12/2017", "user1");
-        Date dateOfIssue = new Calendar.Builder().setDate(2017, 11, 27).build().getTime();
-        TradeInvoice tradeInvoice = new TradeInvoice("11a/2017", dateOfIssue,1234567890,
-                "Młyn Ambroziak", "pszenica", 100.00, 0.00, 0.00,
+        Date dateOfIssue = new Calendar.Builder().setDate(2017, 11, 29).build().getTime();
+        TradeInvoice tradeInvoice = new TradeInvoice("68/2017", dateOfIssue,1234567890,
+                "Mroczek", "pszenżyto", 100.00, 0.00, 0.00,
                 23.00, 0.00, 0.00, 123.00, tradeRecord);
-        logger.info("\n\n\n\n\n\n\n\n Dodaję fakturę!!!!!!!11\n \n \n \n \n \n \n \n \n \n");
+        logger.info("\nDodaję fakturę!!!!!!!\n");
         assertTrue(invoiceDao.addTradeInvoice(tradeInvoice));
     }
 
@@ -39,5 +43,11 @@ public class DBInvoicesTest {
         "Sklep ogrodniczy Stokrotka", "nasiona tymotki", 0.00, 0.00, 100.00, 0.00, 0.00, 5.00, 105.00,
                 true, 0.00, 0.00, 0.00, purchaseRecord);
         assertTrue(invoiceDao.addPurchaseInvoice(purchaseInvoice));
+    }
+
+    @Test
+    public void testGetTradeInvoices(){
+        assertNotNull(invoiceDao.getTradeInvoices("user1", "12/2017"));
+        assertEquals(invoiceDao.getTradeInvoices("user1", "11/2017").size(), 0);
     }
 }

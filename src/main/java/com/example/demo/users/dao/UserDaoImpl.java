@@ -77,11 +77,14 @@ public class UserDaoImpl implements UserDao {
         try {
             users = session.createQuery("from User where username=?")
                     .setParameter(0, userName).list();
-            session.close();
+            //session.close();
             return users.size() != 0;
         }catch (GenericJDBCException e){
             System.out.println("Connection with DB error");
             return false;
+        }
+        finally{
+            session.close();
         }
     }
 
@@ -102,7 +105,7 @@ public class UserDaoImpl implements UserDao {
                 session.delete(user);
                 Transaction tx = session.beginTransaction();
                 tx.commit();
-                session.close();
+                //session.close();
             }catch (ConstraintViolationException cve){
                 logger.info("This user can't be deleted - constraint key exists");
                 return false;
@@ -110,6 +113,9 @@ public class UserDaoImpl implements UserDao {
         }catch (GenericJDBCException e){
             System.out.println("Connection with DB error");
             return false;
+        }
+        finally{
+            session.close();
         }
         return true;
     }
@@ -133,7 +139,9 @@ public class UserDaoImpl implements UserDao {
             logger.info("Connection with DB error");
             return null;
         }
-        session.close();
+        finally{
+            session.close();
+        }
         return new HashSet<>(userRoles);
     }
 
@@ -164,7 +172,9 @@ public class UserDaoImpl implements UserDao {
             logger.info("Connection with DB error");
             return false;
         }
-        session.close();
+        finally{
+            session.close();
+        }
         return true;
     }
 
@@ -186,7 +196,9 @@ public class UserDaoImpl implements UserDao {
             logger.info("Connection with DB error");
             return null;
         }
-        session.close();
+        finally{
+            session.close();
+        }
         return users.get(0);
     }
 
@@ -204,7 +216,9 @@ public class UserDaoImpl implements UserDao {
             logger.info("Connection with DB error");
             return null;
         }
-        session.close();
+        finally{
+            session.close();
+        }
         if (users.isEmpty()){
             logger.info("User with NIP: " + NIP + " doesn't exists!");
             return null;

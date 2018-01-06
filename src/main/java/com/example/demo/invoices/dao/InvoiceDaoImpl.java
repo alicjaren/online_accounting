@@ -12,11 +12,13 @@ import org.hibernate.exception.GenericJDBCException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class InvoiceDaoImpl implements InvoiceDao {
 
     private AddingToDB addingToDB = new AddingToDB();
     private UserDaoImpl userDao = new UserDaoImpl();
+    private Logger logger = Logger.getAnonymousLogger();
     //private MonthlyReckoningDaoImpl monthlyReckoningDao = new MonthlyReckoningDaoImpl();
 
     @Override
@@ -62,6 +64,25 @@ public class InvoiceDaoImpl implements InvoiceDao {
         }catch (GenericJDBCException e){
             System.out.println("Connection with DB error");
             return false;
+        }
+    }
+
+    @Override
+    public List<TradeInvoice> getTradeInvoices(String username, String tradeRecordName) {
+        DatabaseConfig dbConfig = new DatabaseConfig();
+        SessionFactory factory = dbConfig.sessionFactory();
+        Session session = factory.openSession();
+        List<TradeInvoice> invoices = new ArrayList<>();
+        User user = userDao.getUser(username);
+        try {
+            invoices = session.createQuery("select i from  MonthlyReckoning m join m.tradeRecord t join t.tradeInvoices i" +
+                    " where t.name=? and m.user=?")
+                    .setParameter(0, tradeRecordName).setParameter(1,user).list();
+            session.close();
+            return invoices;
+        }catch (GenericJDBCException e){
+            System.out.println("Connection with DB error");
+            return null;
         }
     }
 }
