@@ -9,6 +9,7 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -56,5 +57,106 @@ public class InvoiceValidatorTest {
         assertFalse(validator.isValidValuesOfVAT(10, 0));
         assertTrue(validator.isValidValuesOfVAT(0,0));
         assertTrue(validator.isValidValuesOfVAT(10, 10));
+    }
+
+
+    @Test
+    public void testIsPurchaseInvoiceInDB(){
+        assertTrue(validator.isPurchaseInvoiceInDB("F123/11/2017", "1234567890"));
+        assertFalse(validator.isPurchaseInvoiceInDB("F123/11/2017", "12347890"));
+        assertFalse(validator.isPurchaseInvoiceInDB("F3/11/2017", "1234567890"));
+        assertFalse(validator.isPurchaseInvoiceInDB("F11/2017", "12345678"));
+    }
+
+    //@Test
+    public void testFindNameOfRecordForPurchaseRecord() {
+        //for <= 25th January now
+//        Date dateOfIssue = new Calendar.Builder().setDate(2018, 0, 5).build().getTime();
+//        LocalDate localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "1/2018");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2018, 6, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "Faktura posiada datę wyprzedzającą dziesiejszy dzień. Jej rozliczenie nie jest możliwe.");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2016, 6, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue),"Nie można rozliczyć podanej faktury, jest ona starsza niż rok.");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2017, 11, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue),"12/2017");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2017, 10, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "12/2017");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2017, 9, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue),"12/2017");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2017, 8, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue),"Faktura została wystawiona ponad 3 miesiące temu, nie można już jej rozliczyć.");
+
+
+        //for <=25th February now
+//        Date dateOfIssue = new Calendar.Builder().setDate(2018, 1, 5).build().getTime();
+//        LocalDate localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "2/2018");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2018, 0, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "1/2018");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2017, 11, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "1/2018");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2017, 10, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "1/2018");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2017, 9, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "Faktura została wystawiona ponad 3 miesiące temu, nie można już jej rozliczyć.");
+
+        //for <=25th March now
+//        Date dateOfIssue = new Calendar.Builder().setDate(2018, 2, 5).build().getTime();
+//        LocalDate localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "3/2018");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2018, 1, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "2/2018");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2018, 0, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "2/2018");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2017, 11, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "2/2018");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2017, 10, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "Faktura została wystawiona ponad 3 miesiące temu, nie można już jej rozliczyć.");
+//
+//        //>=25th March now
+//        Date dateOfIssue = new Calendar.Builder().setDate(2018, 2, 5).build().getTime();
+//        LocalDate localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "3/2018");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2018, 1, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "3/2018");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2018, 2, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "3/2018");
+//
+//        dateOfIssue = new Calendar.Builder().setDate(2017, 11, 5).build().getTime();
+//        localDateTimeOfIssue = dateOfIssue.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        assertEquals(validator.findNameOfRecordForPurchaseInvoice(localDateTimeOfIssue), "Faktura została wystawiona ponad 3 miesiące temu, nie można już jej rozliczyć.");
     }
 }

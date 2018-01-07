@@ -27,6 +27,17 @@ public class PurchaseRecord {
     public PurchaseRecord(){
     }
 
+    public PurchaseRecord(String name){
+        this.name = name;
+        this.sumNet23 = 0;
+        this.sumNet8 = 0;
+        this.sumNet5 = 0;
+        this.sumVat23 = 0;
+        this.sumVat8 = 0;
+        this.sumVat5 = 0;
+        this.sumGross = 0;
+    }
+
     public PurchaseRecord(String name, double sumNet23, double sumNet8, double sumNet5,
                           double sumVat23, double sumVat8, double sumVat5, double sumGross) {
         this.name = name;

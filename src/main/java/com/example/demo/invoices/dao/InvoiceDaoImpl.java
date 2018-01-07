@@ -19,10 +19,13 @@ public class InvoiceDaoImpl implements InvoiceDao {
     private AddingToDB addingToDB = new AddingToDB();
     private UserDaoImpl userDao = new UserDaoImpl();
     private Logger logger = Logger.getAnonymousLogger();
-    //private MonthlyReckoningDaoImpl monthlyReckoningDao = new MonthlyReckoningDaoImpl();
 
     @Override
     public boolean addTradeInvoice(TradeInvoice tradeInvoice) {
+//        if(){//if monthly reckoning, trade record and purchase record don't exist, create them
+//
+//        }
+
         return addingToDB.addToDB(tradeInvoice);
     }
 

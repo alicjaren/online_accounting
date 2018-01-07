@@ -15,8 +15,8 @@ public class PurchaseInvoice {
     private int idPurchaseInvoice;
     private String invoiceNumber;
     private Date dateOfIssue;
-    private LocalDateTime dateCreated;
-    private LocalDateTime dateChanged;
+    private Date dateCreated;
+    private Date dateChanged;
     private long tradePartnerNIP;
     private String tradePartnerName;
     private String dealingThingName;
@@ -90,20 +90,20 @@ public class PurchaseInvoice {
     }
 
     @Column(name = "date_created")
-    public LocalDateTime getDateCreated() {
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(LocalDateTime dateCreated) {
+    public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
 
     @Column(name="date_changed")
-    public LocalDateTime getDateChanged() {
+    public Date getDateChanged() {
         return dateChanged;
     }
 
-    public void setDateChanged(LocalDateTime dateChanged) {
+    public void setDateChanged(Date dateChanged) {
         this.dateChanged = dateChanged;
     }
 

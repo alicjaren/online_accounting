@@ -6,9 +6,9 @@ import com.example.demo.reckoning.model.TradeRecord;
 
 public interface RecordDao {
 
-    boolean isRecordInDB(int recordId, boolean tradeRecord);
+    //boolean isRecordInDB(int recordId, boolean tradeRecord);
 
-    boolean isRecordInDBByName(String name, boolean tradeRecord);
+    boolean isRecordInDBByName(String name, String userame, boolean tradeRecord);
 
     boolean addTradeRecord(TradeRecord tradeRecord);
 
@@ -16,6 +16,6 @@ public interface RecordDao {
 
     TradeRecord getTradeRecord(String name, String username);
 
-    PurchaseRecord getPurchaseRecord(String name);
+    PurchaseRecord getPurchaseRecord(String name, String username);
 
 }

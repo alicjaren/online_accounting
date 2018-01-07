@@ -20,60 +20,45 @@ public class RecordDaoImpl implements RecordDao {
     AddingToDB addingToDB = new AddingToDB();
 
 
-    @Override
-    //todo username uwzględnić
-    public boolean isRecordInDB(int id, boolean tradeRecord){
-        DatabaseConfig dbConfig = new DatabaseConfig();
-        SessionFactory factory = dbConfig.sessionFactory();
-        Session session = factory.openSession();
-        List<Object> records;
-        try {
-            if(tradeRecord){
-                records = session.createQuery("from TradeRecord where idTradeRecord=?")
-                        .setParameter(0, id).list();
-            }
-            else{
-                records = session.createQuery("from PurchaseRecord where idPurchaseRecord=?")
-                        .setParameter(0, id).list();
-            }
-            session.close();
-            return records.size() != 0;
-        }catch (GenericJDBCException e){
-            logger.info("Connection with DB error");
-            return false;
-        }
-    }
+//    @Override
+//    //todo username uwzględnić
+//    public boolean isRecordInDB(int id, boolean tradeRecord){
+//        DatabaseConfig dbConfig = new DatabaseConfig();
+//        SessionFactory factory = dbConfig.sessionFactory();
+//        Session session = factory.openSession();
+//        List<Object> records;
+//        try {
+//            if(tradeRecord){
+//                records = session.createQuery("from TradeRecord where idTradeRecord=?")
+//                        .setParameter(0, id).list();
+//            }
+//            else{
+//                records = session.createQuery("from PurchaseRecord where idPurchaseRecord=?")
+//                        .setParameter(0, id).list();
+//            }
+//            session.close();
+//            return records.size() != 0;
+//        }catch (GenericJDBCException e){
+//            logger.info("Connection with DB error");
+//            return false;
+//        }
+//    }
 
     @Override
-    //todo username uwzględnić
-    public boolean isRecordInDBByName(String name, boolean tradeRecord){
-        DatabaseConfig dbConfig = new DatabaseConfig();
-        SessionFactory factory = dbConfig.sessionFactory();
-        Session session = factory.openSession();
-        List<Object> records;
-        try {
-            if(tradeRecord){
-                records = session.createQuery("from TradeRecord where name=?")
-                        .setParameter(0, name).list();
-            }
-            else{
-                records = session.createQuery("from PurchaseRecord where name=?")
-                        .setParameter(0, name).list();
-            }
-            session.close();
-            return records.size() != 0;
-        }catch (GenericJDBCException e){
-            logger.info("Connection with DB error");
-            return false;
+    public boolean isRecordInDBByName(String recordName, String userName, boolean tradeRecord){
+
+        if(tradeRecord){
+            return getTradeRecord(recordName,userName) != null;
+        }
+        else{
+             return getPurchaseRecord(recordName, userName) != null;
         }
     }
 
 
     @Override
     public boolean addTradeRecord(TradeRecord tradeRecord) {
-        if(isRecordInDBByName(tradeRecord.getName(), true)){
-            return false;
-        }
+
         return addingToDB.addToDB(tradeRecord);
         /*DatabaseConfig dbConfig = new DatabaseConfig();
         SessionFactory factory = dbConfig.sessionFactory();
@@ -92,9 +77,6 @@ public class RecordDaoImpl implements RecordDao {
 
     @Override
     public boolean addPurchaseRecord(PurchaseRecord purchaseRecord) {
-        if(isRecordInDBByName(purchaseRecord.getName(), false)){
-            return false;
-        }
 
         return addingToDB.addToDB(purchaseRecord);
         /*DatabaseConfig dbConfig = new DatabaseConfig();
@@ -115,9 +97,6 @@ public class RecordDaoImpl implements RecordDao {
 
     @Override
     public TradeRecord getTradeRecord(String recordName, String userName){
-        if(!isRecordInDBByName(recordName, true)){
-            return null;
-        }
         MonthlyReckoningDaoImpl monthlyReckoningDao = new MonthlyReckoningDaoImpl();
         MonthlyReckoning monthlyReckoning = monthlyReckoningDao.getMonthlyReckoning(userName, recordName);
         if (monthlyReckoning == null){
@@ -127,24 +106,12 @@ public class RecordDaoImpl implements RecordDao {
     }
 
     @Override
-    //todo username uwzględnić
-    public PurchaseRecord getPurchaseRecord(String name) {
-        if(!isRecordInDBByName(name, false)){
+    public PurchaseRecord getPurchaseRecord(String recordName, String userName) {
+        MonthlyReckoningDaoImpl monthlyReckoningDao = new MonthlyReckoningDaoImpl();
+        MonthlyReckoning monthlyReckoning = monthlyReckoningDao.getMonthlyReckoning(userName, recordName);
+        if (monthlyReckoning == null){
             return null;
         }
-        DatabaseConfig dbConfig = new DatabaseConfig();
-        SessionFactory factory = dbConfig.sessionFactory();
-        Session session = factory.openSession();
-        List<PurchaseRecord> records = new ArrayList<>();
-
-        try{
-            records = session.createQuery("from PurchaseRecord where name=?")
-                    .setParameter(0, name).list();
-        }catch(GenericJDBCException e){
-            logger.info("Connection with DB error");
-            return null;
-        }
-        session.close();
-        return records.get(0);
+        return monthlyReckoning.getPurchaseRecord();
     }
 }

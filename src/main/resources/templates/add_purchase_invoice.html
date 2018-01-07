@@ -48,13 +48,13 @@
                 </li>
 
                 <li>
-                    <label for="dealingThingName" class="invoiceEl" data-icon="p"> Przedmioty sprzedaży </label>
+                    <label for="dealingThingName" class="invoiceEl" data-icon="p"> Przedmioty zakupu </label>
                     <input id="dealingThingName" name="dealingThingName" required="required" type="text" placeholder="Przedmioty zakupu" size="100"/>
                 </li>
 
                 <li>
                     <table>
-                        <caption>Kwoty zakupów</caption>
+                        <caption>Kwoty zakupów niezaliczanych do środków trwałych</caption>
                         <tr>
                             <th>Stawka VAT</th>
                             <th>Wartość netto</th>
@@ -98,6 +98,38 @@
                     <input id="gross" name="gross" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
                 </li>
 
+                <li>
+                    <label class="radioDeducted" >VAT podlega odliczeniu </label>
+
+                    <label for="deductedYes" class="radioDeducted" data-icon="p">TAK</label>
+                    <input id="deductedYes" type="radio" name="deducted" value="YES" checked="checked" />
+
+                    <label for="deductedNo" class="radioDeducted" data-icon="p">NIE</label>
+                    <input id="deductedNo" type="radio" name="deducted" value="NO"/>
+                </li>
+
+                <li>
+                    <table>
+                        <caption>Zakupy - środki trwałe</caption>
+                        <tr>
+                            <th>Netto</th>
+                            <th>VAT</th>
+                            <th>Brutto</th>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <input id="fixedAssetsNet" name="fixedAssetsNet" type="number" step = "0.01" placeholder="0,00" size="12"/>
+                            </td>
+                            <td>
+                                <input id="fixedAssetsVat" name="fixedAssetsVat" type="number" step = "0.01" placeholder="0,00" size="12"/>
+                            </td>
+                            <td>
+                                <input id="fixedAssetsGross" name="fixedAssetsGross" type="number" step = "0.01" placeholder="0,00" size="12"/>
+                            </td>
+                        </tr>
+                    </table>
+                </li>
                 <li>
                     <input type="submit" class="button" value="Zapisz"/>
                 </li>

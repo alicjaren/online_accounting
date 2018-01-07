@@ -27,10 +27,8 @@ public class TradeInvoice {
     private double vat8;
     private double vat5;
     private double gross;
-    //private LocalDateTime dateCreated;
     private Date dateCreated;
     private Date dateChanged;
-    //private LocalDateTime dateChanged;
     private TradeRecord tradeRecord;
 
 

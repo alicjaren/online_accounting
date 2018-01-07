@@ -65,6 +65,7 @@ public class MonthlyReckoningDaoImpl implements MonthlyReckoningDao{
 
     @Override
     public MonthlyReckoning getMonthlyReckoning(String userName, String reckoningName){
+        logger.info("MonthlyReckoning for: userName: " + userName + " reckoningName: " + reckoningName);
         DatabaseConfig dbConfig = new DatabaseConfig();
         SessionFactory factory = dbConfig.sessionFactory();
         Session session = factory.openSession();
@@ -75,7 +76,14 @@ public class MonthlyReckoningDaoImpl implements MonthlyReckoningDao{
             reckonings = session.createQuery("from MonthlyReckoning m where m.name=? and m.user=?")
                     .setString(0, reckoningName).setParameter(1, user).list();
             session.close();
-            return reckonings.get(0);
+            if (reckonings.size() != 0){
+                return reckonings.get(0);
+            }
+            else{
+                logger.info("MonthlyReckoning: " + reckoningName + " doesn't exist in DB");
+                return null;
+            }
+
         }catch (GenericJDBCException e){
             logger.info("Connection with DB error");
             return null;

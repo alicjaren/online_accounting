@@ -82,7 +82,7 @@ public class UserController {
                 tradePartnerName, dealingThingName, net23, net8, net5, vat23, vat8, vat5, gross);
 
         if (result.equals("SUCCESS")){
-            model.addAttribute("result", "Nowa faktura zakupu została dodana do rejestru");
+            model.addAttribute("result", "Nowa faktura sprzedaży została dodana do rejestru");
         }
         else{
             model.addAttribute("error", result);
@@ -99,8 +99,40 @@ public class UserController {
 
 
     @RequestMapping(value = "/user/purchase/invoice/adding", method = RequestMethod.POST)
-    public String getAddingPurchaseInvoice(Model model){
-        logger.info("Add purchase invoice");
+    public String getAddingPurchaseInvoice(@RequestParam("invoiceNumber") String invoiceNumber,
+                                           @RequestParam("dateOfIssue") String dateOfIssue,
+                                           @RequestParam("tradePartnerNIP") String tradePartnerNIP,
+                                           @RequestParam("tradePartnerName") String tradePartnerName,
+                                           @RequestParam("dealingThingName") String dealingThingName,
+                                           @RequestParam("net23") double net23, @RequestParam("vat23") double vat23,
+                                           @RequestParam("net8") double net8, @RequestParam("vat8") double vat8,
+                                           @RequestParam("net5") double net5, @RequestParam("vat5") double vat5,
+                                           @RequestParam("gross") double gross,
+                                           @RequestParam("fixedAssetsNet") double fixedAssetsNet,
+                                           @RequestParam("fixedAssetsVat") double fixedAssetsVat,
+                                           @RequestParam("fixedAssetsGross") double fixedAssetsGross,
+                                           @RequestParam("deducted") String deductedValue, Model model){
+
+        logger.info("Adding purchaseInvoice: number: " + invoiceNumber + " data: " + dateOfIssue + " partnerNIP: " + tradePartnerNIP +
+                " partnerName: " + tradePartnerName + " dealingThing: " + dealingThingName + " gross: " + gross);
+
+        boolean deducted = deductedValue.equals("YES");
+        UserOperation userOperation = new UserOperation();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); //get logged in username
+
+        String result = userOperation.addPurchaseInvoiceToDB(username, invoiceNumber, dateOfIssue, tradePartnerNIP,
+                tradePartnerName, dealingThingName, net23, net8, net5, vat23, vat8, vat5, gross, deducted,
+                fixedAssetsNet, fixedAssetsVat, fixedAssetsGross);
+
+        if (result.equals("SUCCESS")){
+            model.addAttribute("result", "Nowa faktura zakupu została dodana do rejestru");
+        }
+        else{
+            model.addAttribute("error", result);
+            return "/add_purchase_invoice";
+        }
+
         return "/user";
     }
 }

@@ -37,7 +37,7 @@ public class DBInvoicesTest {
 
     //@Test
     public void testAddPurchaseInvoice(){
-        PurchaseRecord purchaseRecord = recordDao.getPurchaseRecord("11/2017");
+        PurchaseRecord purchaseRecord = recordDao.getPurchaseRecord("11/2017", "user1");
         Date dateOfIssue = new Calendar.Builder().setDate(2017, 11, 30).build().getTime();
         PurchaseInvoice purchaseInvoice = new PurchaseInvoice("F123/11/2017", dateOfIssue, 1234567890,
         "Sklep ogrodniczy Stokrotka", "nasiona tymotki", 0.00, 0.00, 100.00, 0.00, 0.00, 5.00, 105.00,
@@ -49,5 +49,13 @@ public class DBInvoicesTest {
     public void testGetTradeInvoices(){
         assertNotNull(invoiceDao.getTradeInvoices("user1", "12/2017"));
         assertEquals(invoiceDao.getTradeInvoices("user1", "11/2017").size(), 0);
+    }
+
+    @Test
+    public void testIsPurchaseInvoiceInDB(){
+        assertTrue(invoiceDao.isPurchaseInvoiceInDB("F123/11/2017", 1234567890));
+        assertFalse(invoiceDao.isPurchaseInvoiceInDB("F123/11/27", 1234567890));
+        assertFalse(invoiceDao.isPurchaseInvoiceInDB("F123/11/2017", 1234560));
+        assertFalse(invoiceDao.isPurchaseInvoiceInDB("F123/11/27", 12345690));
     }
 }
