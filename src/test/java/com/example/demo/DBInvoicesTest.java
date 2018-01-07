@@ -8,15 +8,13 @@ import com.example.demo.reckoning.model.PurchaseRecord;
 import com.example.demo.reckoning.model.TradeRecord;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Logger;
 
 import static junit.framework.TestCase.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class DBInvoicesTest {
 
@@ -48,7 +46,17 @@ public class DBInvoicesTest {
     @Test
     public void testGetTradeInvoices(){
         assertNotNull(invoiceDao.getTradeInvoices("user1", "12/2017"));
+        //assertEquals(invoiceDao.getTradeInvoices("user1", "12/2017").size(), 5);
         assertEquals(invoiceDao.getTradeInvoices("user1", "11/2017").size(), 0);
+    }
+
+    @Test
+    public void testGetPurchaseInvoices(){
+        assertEquals(invoiceDao.getPurchaseInvoices("user2","12/2017").size(), 3);
+        assertEquals(invoiceDao.getPurchaseInvoices("user1","12/2017").size(), 1);
+        assertEquals(invoiceDao.getPurchaseInvoices("user2","11/2017").size(), 0);
+        ArrayList<PurchaseInvoice> purchaseInvoices = new ArrayList<>(invoiceDao.getPurchaseInvoices("user2", "12/2017"));
+        purchaseInvoices.forEach(i -> logger.info("invoiceNr: " + i.getInvoiceNumber() + " date: " + i.getDateOfIssue()));
     }
 
     @Test

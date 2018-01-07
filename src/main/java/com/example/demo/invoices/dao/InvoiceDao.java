@@ -18,4 +18,6 @@ public interface InvoiceDao {
     boolean isTradeInvoiceInDB(String invoiceNumber, String username);
 
     List<TradeInvoice> getTradeInvoices(String username, String tradeRecordName);
+
+    List<PurchaseInvoice> getPurchaseInvoices(String username, String purchaseRecordName);
 }

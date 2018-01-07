@@ -3,6 +3,7 @@ package com.example.demo.user.operation.model;
 import com.example.demo.admin.operation.model.Validator;
 import com.example.demo.invoices.dao.InvoiceDaoImpl;
 import com.example.demo.invoices.model.PurchaseInvoice;
+import com.example.demo.invoices.model.PurchaseInvoiceComparator;
 import com.example.demo.invoices.model.TradeInvoice;
 import com.example.demo.invoices.model.TradeInvoiceComparator;
 import com.example.demo.reckoning.dao.MonthlyReckoningDaoImpl;
@@ -208,6 +209,16 @@ public class UserOperation {
     public ArrayList<TradeInvoice> getTradeInvoices(String userName, String tradeRecordName){
         ArrayList<TradeInvoice> invoices = new ArrayList<>(invoiceDao.getTradeInvoices(userName, tradeRecordName));
         invoices.sort(new TradeInvoiceComparator());
+        invoices.forEach(in -> logger.info("Invoice nr: " + in.getInvoiceNumber() + " date: " + in.getDateOfIssue().toString()));
+        return invoices;
+    }
+
+    /*leak of invoices -> return empty ArrayList
+    error by connection with DB -> return null
+    ok -> return ArrayList sorted by date of issue */
+    public ArrayList<PurchaseInvoice> getPurchaseInvoices(String userName, String purchaseRecordName){
+        ArrayList<PurchaseInvoice> invoices = new ArrayList<>(invoiceDao.getPurchaseInvoices(userName, purchaseRecordName));
+        invoices.sort(new PurchaseInvoiceComparator());
         invoices.forEach(in -> logger.info("Invoice nr: " + in.getInvoiceNumber() + " date: " + in.getDateOfIssue().toString()));
         return invoices;
     }

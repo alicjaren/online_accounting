@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.admin.operation.model.AdminOperation;
+import com.example.demo.invoices.model.TradeInvoice;
 import com.example.demo.user.operation.model.UserOperation;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
 
@@ -134,5 +136,30 @@ public class UserController {
         }
 
         return "/user";
+    }
+
+    @RequestMapping("/user/trade/invoice/listing")
+    public String getListingTradeInvoicesForm(Model model){
+        model.addAttribute("registerName", " rejestru faktur sprzedaży:");
+        model.addAttribute("url", "/user/trade/invoice/listing");
+        return "/get_register";
+    }
+
+    @RequestMapping(value = "/user/trade/invoice/listing", method = RequestMethod.POST)
+    public String getListingTradeInvoices(@RequestParam("month") String month, @RequestParam("year") String year,
+                                          Model model){
+        model.addAttribute("month", month);
+        model.addAttribute("year", year);
+        String tradeRecordName = month + "/" + year;
+        UserOperation userOperation = new UserOperation();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); //get logged in username
+
+        logger.info("Listing of trade invoices for user: " + username + " for month: " + month + " and year: " + year);
+
+        ArrayList<TradeInvoice> invoices = userOperation.getTradeInvoices(username, tradeRecordName);
+        model.addAttribute("invoices", invoices);
+
+        return "/list_trade_invoices";
     }
 }

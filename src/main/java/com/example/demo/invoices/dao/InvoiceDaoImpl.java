@@ -88,5 +88,24 @@ public class InvoiceDaoImpl implements InvoiceDao {
             return null;
         }
     }
+
+    @Override
+    public List<PurchaseInvoice> getPurchaseInvoices(String username, String purchaseRecordName) {
+        DatabaseConfig dbConfig = new DatabaseConfig();
+        SessionFactory factory = dbConfig.sessionFactory();
+        Session session = factory.openSession();
+        List<PurchaseInvoice> invoices;
+        User user = userDao.getUser(username);
+        try {
+            invoices = session.createQuery("select i from  MonthlyReckoning m join m.purchaseRecord p join p.purchaseInvoices i" +
+                    " where p.name=? and m.user=?")
+                    .setParameter(0, purchaseRecordName).setParameter(1,user).list();
+            session.close();
+            return invoices;
+        }catch (GenericJDBCException e){
+            System.out.println("Connection with DB error");
+            return null;
+        }
+    }
 }
 

@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header :: header-css"/>
+    <title>Faktury sprzedaży</title>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1>Faktury sprzedaży</h1>
+
+        <div th:if="${month} != null and ${year} != null">
+            <div class="alert alert-info">
+                Miesiąc:
+                <span th:text="${month}"></span>
+                Rok:
+                <span th:text="${year}"></span>
+            </div>
+        </div>
+
+        <div th:if="${error} != null">
+            <div class="alert alert-info">
+                <span th:text="${error}"></span>
+            </div>
+        </div>
+
+        <div th:if="${not #lists.isEmpty(invoices)}">
+            <table class="invoices-table">
+                <tr>
+                    <th>Data wystawienia</th>
+                    <th>Numer faktury</th>
+                    <th>Data wprowadzenia</th>
+                    <th>NIP kupującego</th>
+                    <th>Kupujący</th>
+                    <th>Przedmiot sprzedaży</th>
+                    <th>Netto 23%</th>
+                    <th>VAT 23%</th>
+                    <th>Netto 8%</th>
+                    <th>VAT 8%</th>
+                    <th>Netto 5%</th>
+                    <th>VAT 5%</th>
+                    <th>Brutto</th>
+                </tr>
+                <tr th:each="inv: ${invoices}">
+                    <td th:text="${inv.dateOfIssue}"></td>
+                    <td th:text="${inv.invoiceNumber}"></td>
+                    <td th:text="${inv.dateChanged}"></td>
+                    <td th:text="${inv.tradePartnerNIP}"></td>
+                    <td th:text="${inv.tradePartnerName}"></td>
+                    <td th:text="${inv.dealingThingName}"></td>
+                    <td th:text="${inv.net23}"></td>
+                    <td th:text="${inv.vat23}"></td>
+                    <td th:text="${inv.net8}"></td>
+                    <td th:text="${inv.vat8}"></td>
+                    <td th:text="${inv.net5}"></td>
+                    <td th:text="${inv.vat5}"></td>
+                    <td th:text="${inv.gross}"></td>
+                </tr>
+            </table>
+        </div>
+
+        <div th:if="${#lists.isEmpty(invoices)}">
+            <span>Brak zarejestrowanych faktur</span>
+        </div>
+
+        <div th:if="${invoices} == null">
+            <span>Przepraszamy, wystąpiły błędy techniczne, prosimy spróbować ponownie.</span>
+        </div>
+
+
+        <!--<form th:action="@{/logout}" method="post">-->
+            <!--<input type="submit" value="Sign Out"/>-->
+        <!--</form>-->
+
+    </div>
+
+</div>
+<!-- /.container -->
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>
