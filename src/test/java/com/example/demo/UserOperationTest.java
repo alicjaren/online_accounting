@@ -50,4 +50,11 @@ public class UserOperationTest {
 
 
     }
+
+    @Test
+    public void testDeleteTradeInvoice(){
+        assertEquals("Usunięcie nie jest możlwie. Taka faktura nie istnieje w bazie lub należy do innego użytkownika.", userOperation.deleteTradeInvoiceFromDB("68/2017", "user2", "11"));
+        assertEquals("Usunięcie nie jest możlwie. Taka faktura nie istnieje w bazie lub należy do innego użytkownika.", userOperation.deleteTradeInvoiceFromDB("22a/2017", "user1", "12"));
+
+    }
 }

@@ -222,4 +222,20 @@ public class UserOperation {
         invoices.forEach(in -> logger.info("Invoice nr: " + in.getInvoiceNumber() + " date: " + in.getDateOfIssue().toString()));
         return invoices;
     }
+
+    public String deleteTradeInvoiceFromDB(String invoiceNumber, String username, String invoiceId){
+        InvoiceDaoImpl invoiceDao = new InvoiceDaoImpl();
+
+        if(!invoiceDao.isTradeInvoiceInDB(invoiceNumber, username)){
+            logger.info("Such invoice doesn't exist: invoiceNumber: " + invoiceNumber + " for user: " + username);
+            return "Usunięcie nie jest możlwie. Taka faktura nie istnieje w bazie lub należy do innego użytkownika.";
+        }
+
+        if(!invoiceDao.deleteTradeInvoice(invoiceId)){
+            logger.info("Error by connection with DB");
+            return "Przepraszamy, problemy techniczne. Prosimy spórbować ponownie";
+        }
+
+        return "SUCCESS";
+    }
 }

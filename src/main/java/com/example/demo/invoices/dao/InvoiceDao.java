@@ -20,4 +20,6 @@ public interface InvoiceDao {
     List<TradeInvoice> getTradeInvoices(String username, String tradeRecordName);
 
     List<PurchaseInvoice> getPurchaseInvoices(String username, String purchaseRecordName);
+
+    boolean deleteTradeInvoice(String IdTradeInvoice);
 }

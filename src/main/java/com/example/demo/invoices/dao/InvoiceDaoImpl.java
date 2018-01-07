@@ -3,11 +3,13 @@ package com.example.demo.invoices.dao;
 import com.example.demo.config.DatabaseConfig;
 import com.example.demo.invoices.model.PurchaseInvoice;
 import com.example.demo.invoices.model.TradeInvoice;
+import com.example.demo.reckoning.model.TradeRecord;
 import com.example.demo.service.AddingToDB;
 import com.example.demo.users.dao.UserDaoImpl;
 import com.example.demo.users.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.exception.GenericJDBCException;
 
 import java.util.ArrayList;
@@ -22,10 +24,6 @@ public class InvoiceDaoImpl implements InvoiceDao {
 
     @Override
     public boolean addTradeInvoice(TradeInvoice tradeInvoice) {
-//        if(){//if monthly reckoning, trade record and purchase record don't exist, create them
-//
-//        }
-
         return addingToDB.addToDB(tradeInvoice);
     }
 
@@ -105,6 +103,26 @@ public class InvoiceDaoImpl implements InvoiceDao {
         }catch (GenericJDBCException e){
             System.out.println("Connection with DB error");
             return null;
+        }
+    }
+
+    @Override
+    public boolean deleteTradeInvoice(String IdTradeInvoice) {
+        DatabaseConfig dbConfig = new DatabaseConfig();
+        SessionFactory factory = dbConfig.sessionFactory();
+        Session session = factory.openSession();
+        TradeInvoice tradeInvoice = new TradeInvoice();
+        tradeInvoice.setIdTradeInvoice(Integer.parseInt(IdTradeInvoice));
+        try{
+            session.delete(tradeInvoice);
+            Transaction tx = session.beginTransaction();
+            tx.commit();
+            session.close();
+            return true;
+        }catch(GenericJDBCException e) {
+            System.out.println("Connection with DB error");
+            session.close();
+            return false;
         }
     }
 }

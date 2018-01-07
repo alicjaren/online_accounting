@@ -162,4 +162,24 @@ public class UserController {
 
         return "/list_trade_invoices";
     }
+
+    @RequestMapping(value="/user/trade/invoice/delete", method=RequestMethod.DELETE)
+    public String deleteTradeInvoice(@RequestParam("invoiceId") String invoiceId,
+                                     @RequestParam("invoiceNumber") String invoiceNumber, Model model){
+
+        UserOperation userOperation = new UserOperation();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); //get logged in username
+        logger.info("Deleting trade invoice number: " + invoiceNumber + " id: " + invoiceId + " by user " + username);
+
+        String result = userOperation.deleteTradeInvoiceFromDB(invoiceNumber, username, invoiceId);
+        if(result.equals("SUCCESS")){
+            model.addAttribute("result", "Faktura o numerze " + invoiceNumber + " została usunięta");
+            return "/list_trade_invoice";
+        }
+        else{
+            model.addAttribute("error", result);
+            return  "/list_trade_invoice";
+        }
+    }
 }
