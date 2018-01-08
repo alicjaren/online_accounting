@@ -1,10 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <div th:replace="fragments/header :: header-css"/>
     <title>Faktury zakupu</title>
 </head>
 <body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1>Faktury zakupu</h1>
+
+        <div th:if="${month} != null and ${year} != null">
+            <div class="alert alert-info">
+                Miesiąc:
+                <span th:text="${month}"></span>
+                Rok:
+                <span th:text="${year}"></span>
+            </div>
+        </div>
+
+        <div th:if="${error} != null">
+            <div class="alert alert-info">
+                <span th:text="${error}"></span>
+            </div>
+        </div>
+
+        <div th:if="${result} != null">
+            <div class="alert alert-info">
+                <span th:text="${result}"></span>
+            </div>
+        </div>
+
+        <div th:if="${not #lists.isEmpty(invoices)}">
+            <table class="invoices-table">
+                <tr>
+                    <th>Data wystawienia</th>
+                    <th>Numer faktury</th>
+                    <th>Data wprowadzenia</th>
+                    <th>NIP wystawiającego</th>
+                    <th>Sprzedający</th>
+                    <th>Przedmiot zakupu</th>
+                    <th>Netto 23%</th>
+                    <th>VAT 23%</th>
+                    <th>Netto 8%</th>
+                    <th>VAT 8%</th>
+                    <th>Netto 5%</th>
+                    <th>VAT 5%</th>
+                    <th>Brutto</th>
+                    <th>Podlega odliczeniu</th>
+                    <th>Środki trwałe netto</th>
+                    <th>Środki trwałe VAT</th>
+                    <th>Środki trwałe brutto</th>
+                    <th>Usuwanie</th>
+                </tr>
+                <tr th:each="inv: ${invoices}">
+                    <td th:text="${inv.dateOfIssue}"></td>
+                    <td th:text="${inv.invoiceNumber}"></td>
+                    <td th:text="${inv.dateChanged}"></td>
+                    <td th:text="${inv.tradePartnerNIP}"></td>
+                    <td th:text="${inv.tradePartnerName}"></td>
+                    <td th:text="${inv.dealingThingName}"></td>
+                    <td th:text="${inv.net23}"></td>
+                    <td th:text="${inv.vat23}"></td>
+                    <td th:text="${inv.net8}"></td>
+                    <td th:text="${inv.vat8}"></td>
+                    <td th:text="${inv.net5}"></td>
+                    <td th:text="${inv.vat5}"></td>
+                    <td th:text="${inv.gross}"></td>
+                    <td th:if="${inv.deducted}">TAK</td>
+                    <td th:unless="${inv.deducted}">NIE</td>
+                    <td th:text="${inv.fixedAssetsNet}"></td>
+                    <td th:text="${inv.fixedAssetsVat}"></td>
+                    <td th:text="${inv.fixedAssetsGross}"></td>
+                    <td>
+                        <form th:action="@{/user/purchase/invoice/deleting}" method="post">
+                            <input type="hidden" name="invoiceId" th:attr="value = ${inv.idPurchaseInvoice}" />
+                            <input type="hidden" name="invoiceNumber" th:attr="value = ${inv.invoiceNumber}" />
+                            <input type="hidden" name="tradePartnerNIP" th:attr="value = ${inv.tradePartnerNIP}" />
+                            <input type="submit" class="button" value="Usuń"/>
+                        </form>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div th:if="${#lists.isEmpty(invoices)}">
+            <span>Brak zarejestrowanych faktur</span>
+        </div>
+
+        <div th:if="${invoices} == null">
+            <span>Przepraszamy, wystąpiły błędy techniczne, prosimy spróbować ponownie.</span>
+        </div>
+
+
+        <!--<form th:action="@{/logout}" method="post">-->
+        <!--<input type="submit" value="Sign Out"/>-->
+        <!--</form>-->
+
+    </div>
+
+</div>
+<!-- /.container -->
+<div th:replace="fragments/footer :: footer"/>
 
 </body>
 </html>

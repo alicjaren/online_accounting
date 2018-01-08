@@ -22,4 +22,6 @@ public interface InvoiceDao {
     List<PurchaseInvoice> getPurchaseInvoices(String username, String purchaseRecordName);
 
     boolean deleteTradeInvoice(String IdTradeInvoice);
+
+    boolean deletePurchaseInvoice(String IdPurchaseInvoice);
 }

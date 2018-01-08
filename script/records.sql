@@ -20,4 +20,7 @@ CREATE  TABLE test.purchase_records (
   sum_vat_8 DECIMAL(15,2) NOT NULL,
   sum_vat_5 DECIMAL(15,2) NOT NULL,
   sum_gross DECIMAL(15,2) NOT NULL,
+  sum_fixed_assets_net DECIMAL(15,2) NOT NULL,
+  sum_fixed_assets_vat DECIMAL(15,2) NOT NULL,
+  sum_fixed_assets_gross DECIMAL(15,2) NOT NULL,
   PRIMARY KEY (id_purchase_record));

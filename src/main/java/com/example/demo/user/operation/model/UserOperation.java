@@ -238,4 +238,27 @@ public class UserOperation {
 
         return "SUCCESS";
     }
+
+    public String deletePurchaseInvoiceFromDB(String invoiceNumber, String username, String invoiceId, String invoiceNIP) {
+        InvoiceDaoImpl invoiceDao = new InvoiceDaoImpl();
+
+        if(!invoiceDao.isPurchaseInvoiceInDB(invoiceNumber, Long.valueOf(invoiceNIP))){
+            logger.info("Such invoice doesn't exist: invoiceNumber: " + invoiceNumber + " for user: " + username);
+            return "Usunięcie nie jest możlwie. Taka faktura nie istnieje w bazie.";
+        }
+
+        if(!invoiceDao.deletePurchaseInvoice(invoiceId)){
+            logger.info("Error by connection with DB");
+            return "Przepraszamy, problemy techniczne. Prosimy spórbować ponownie";
+        }
+        return "SUCCESS";
+    }
+
+    public TradeRecord getTradeRecord(String username, String recordName){
+        return recordDao.getTradeRecord(recordName, username);
+    }
+
+    public PurchaseRecord getPurchaseRecord(String username, String purchaseRecordName) {
+        return recordDao.getPurchaseRecord(purchaseRecordName, username);
+    }
 }

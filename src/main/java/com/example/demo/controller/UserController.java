@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.admin.operation.model.AdminOperation;
+import com.example.demo.invoices.model.PurchaseInvoice;
 import com.example.demo.invoices.model.TradeInvoice;
+import com.example.demo.reckoning.model.PurchaseRecord;
+import com.example.demo.reckoning.model.TradeRecord;
 import com.example.demo.user.operation.model.UserOperation;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -101,7 +104,7 @@ public class UserController {
 
 
     @RequestMapping(value = "/user/purchase/invoice/adding", method = RequestMethod.POST)
-    public String getAddingPurchaseInvoice(@RequestParam("invoiceNumber") String invoiceNumber,
+    public String addingPurchaseInvoice(@RequestParam("invoiceNumber") String invoiceNumber,
                                            @RequestParam("dateOfIssue") String dateOfIssue,
                                            @RequestParam("tradePartnerNIP") String tradePartnerNIP,
                                            @RequestParam("tradePartnerName") String tradePartnerName,
@@ -163,7 +166,34 @@ public class UserController {
         return "/list_trade_invoices";
     }
 
-    @RequestMapping(value="/user/trade/invoice/delete", method=RequestMethod.DELETE)
+
+    @RequestMapping("/user/purchase/invoice/listing")
+    public String getListingPurchaseInvoicesForm(Model model){
+        model.addAttribute("registerName", " rejestru faktur zakupu:");
+        model.addAttribute("url", "/user/purchase/invoice/listing");
+        return "/get_register";
+    }
+
+    @RequestMapping(value = "/user/purchase/invoice/listing", method = RequestMethod.POST)
+    public String getListingPurchaseInvoices(@RequestParam("month") String month, @RequestParam("year") String year,
+                                             Model model){
+        model.addAttribute("month", month);
+        model.addAttribute("year", year);
+        String purchaseRecordName = month + "/" + year;
+        UserOperation userOperation = new UserOperation();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); //get logged in username
+
+        logger.info("Listing of purchase invoices for user: " + username + " for month: " + month + " and year: " + year);
+
+        ArrayList<PurchaseInvoice> invoices = userOperation.getPurchaseInvoices(username, purchaseRecordName);
+        model.addAttribute("invoices", invoices);
+
+        return "/list_purchase_invoices";
+    }
+
+
+    @RequestMapping(value="/user/trade/invoice/deleting", method=RequestMethod.POST)
     public String deleteTradeInvoice(@RequestParam("invoiceId") String invoiceId,
                                      @RequestParam("invoiceNumber") String invoiceNumber, Model model){
 
@@ -175,11 +205,84 @@ public class UserController {
         String result = userOperation.deleteTradeInvoiceFromDB(invoiceNumber, username, invoiceId);
         if(result.equals("SUCCESS")){
             model.addAttribute("result", "Faktura o numerze " + invoiceNumber + " została usunięta");
-            return "/list_trade_invoice";
+            return "/user";
         }
         else{
             model.addAttribute("error", result);
-            return  "/list_trade_invoice";
+            return  "/user";
         }
     }
+
+    @RequestMapping(value="/user/purchase/invoice/deleting", method=RequestMethod.POST)
+    public String deletePurchaseInvoice(@RequestParam("invoiceId") String invoiceId,
+                                        @RequestParam("invoiceNumber") String invoiceNumber,
+                                        @RequestParam("tradePartnerNIP") String tradePartnerNIP,  Model model){
+
+        UserOperation userOperation = new UserOperation();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); //get logged in username
+        logger.info("Deleting purchase invoice number: " + invoiceNumber + " id: " + invoiceId + " by user " + username);
+
+        String result = userOperation.deletePurchaseInvoiceFromDB(invoiceNumber, username, invoiceId, tradePartnerNIP);
+        if(result.equals("SUCCESS")){
+            model.addAttribute("result", "Faktura o numerze " + invoiceNumber + " została usunięta");
+            return "/user";
+        }
+        else{
+            model.addAttribute("error", result);
+            return  "/user";
+        }
+    }
+
+    @RequestMapping("/user/trade/record/listing")
+    public String getListingTradeRecordForm(Model model){
+        model.addAttribute("registerName", " rejestru sprzedaży");
+        model.addAttribute("url", "/user/trade/record/listing");
+        return "/get_register";
+    }
+
+    @RequestMapping(value = "/user/trade/record/listing", method = RequestMethod.POST)
+    public String getListingTradeRecord(@RequestParam("month") String month, @RequestParam("year") String year,
+                                             Model model){
+        model.addAttribute("month", month);
+        model.addAttribute("year", year);
+        String tradeRecordName = month + "/" + year;
+        UserOperation userOperation = new UserOperation();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); //get logged in username
+
+        logger.info("Listing of trade record for user: " + username + " for month: " + month + " and year: " + year);
+
+        TradeRecord tradeRecord = userOperation.getTradeRecord(username, tradeRecordName);
+        model.addAttribute("record", tradeRecord);
+
+        return "/list_trade_record";
+    }
+
+
+    @RequestMapping("/user/purchase/record/listing")
+    public String getListingPurchaseRecordForm(Model model){
+        model.addAttribute("registerName", " rejestru zakupu");
+        model.addAttribute("url", "/user/purchase/record/listing");
+        return "/get_register";
+    }
+
+    @RequestMapping(value = "/user/purchase/record/listing", method = RequestMethod.POST)
+    public String getListingPurchaseRecord(@RequestParam("month") String month, @RequestParam("year") String year,
+                                        Model model){
+        model.addAttribute("month", month);
+        model.addAttribute("year", year);
+        String purchaseRecordName = month + "/" + year;
+        UserOperation userOperation = new UserOperation();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); //get logged in username
+
+        logger.info("Listing of purchase record for user: " + username + " for month: " + month + " and year: " + year);
+
+        PurchaseRecord purchaseRecord = userOperation.getPurchaseRecord(username, purchaseRecordName);
+        model.addAttribute("record", purchaseRecord);
+
+        return "/list_purchase_record";
+    }
+
 }

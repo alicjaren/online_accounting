@@ -21,6 +21,9 @@ public class PurchaseRecord {
     private double sumVat8;
     private double sumVat5;
     private double sumGross;
+    private double sumFixedAssetsNet;//TODO
+    private double sumFixedAssetsVat;
+    private double sumFixedAssetsGross;
     private Set<PurchaseInvoice> purchaseInvoices = new HashSet<>();
 
 
@@ -48,6 +51,22 @@ public class PurchaseRecord {
         this.sumVat8 = sumVat8;
         this.sumVat5 = sumVat5;
         this.sumGross = sumGross;
+    }
+
+    public PurchaseRecord(String name, double sumNet23, double sumNet8, double sumNet5, double sumVat23,
+                          double sumVat8, double sumVat5, double sumGross, double sumFixedAssetsNet,
+                          double sumFixedAssetsVat, double sumFixedAssetsGross) {
+        this.name = name;
+        this.sumNet23 = sumNet23;
+        this.sumNet8 = sumNet8;
+        this.sumNet5 = sumNet5;
+        this.sumVat23 = sumVat23;
+        this.sumVat8 = sumVat8;
+        this.sumVat5 = sumVat5;
+        this.sumGross = sumGross;
+        this.sumFixedAssetsNet = sumFixedAssetsNet;
+        this.sumFixedAssetsVat = sumFixedAssetsVat;
+        this.sumFixedAssetsGross = sumFixedAssetsGross;
     }
 
     @Id
@@ -131,6 +150,33 @@ public class PurchaseRecord {
 
     public void setSumGross(double sumGross) {
         this.sumGross = sumGross;
+    }
+
+    @Column(name = "sum_fixed_assets_net", nullable = false, length = 17)
+    public double getSumFixedAssetsNet() {
+        return sumFixedAssetsNet;
+    }
+
+    public void setSumFixedAssetsNet(double sumFixedAssetsNet) {
+        this.sumFixedAssetsNet = sumFixedAssetsNet;
+    }
+
+    @Column(name = "sum_fixed_assets_vat", nullable = false, length = 17)
+    public double getSumFixedAssetsVat() {
+        return sumFixedAssetsVat;
+    }
+
+    public void setSumFixedAssetsVat(double sumFixedAssetsVat) {
+        this.sumFixedAssetsVat = sumFixedAssetsVat;
+    }
+
+    @Column(name = "sum_fixed_assets_gross", nullable = false, length = 17)
+    public double getSumFixedAssetsGross() {
+        return sumFixedAssetsGross;
+    }
+
+    public void setSumFixedAssetsGross(double sumFixedAssetsGross) {
+        this.sumFixedAssetsGross = sumFixedAssetsGross;
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "purchaseRecord")

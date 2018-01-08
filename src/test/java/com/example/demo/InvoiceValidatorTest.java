@@ -20,7 +20,7 @@ public class InvoiceValidatorTest {
 
     @Test
     public void testIsTradeInvoiceInDB(){
-        assertTrue(validator.isTradeInvoiceInDB("11a/2017", "user1"));
+        assertTrue(validator.isTradeInvoiceInDB("Fv11b/2017", "user1"));
         assertFalse(validator.isTradeInvoiceInDB("blalblabla", "user1"));
     }
 
@@ -62,7 +62,7 @@ public class InvoiceValidatorTest {
 
     @Test
     public void testIsPurchaseInvoiceInDB(){
-        assertTrue(validator.isPurchaseInvoiceInDB("F123/11/2017", "1234567890"));
+        assertTrue(validator.isPurchaseInvoiceInDB("Fv123a/2018", "1234567890"));
         assertFalse(validator.isPurchaseInvoiceInDB("F123/11/2017", "12347890"));
         assertFalse(validator.isPurchaseInvoiceInDB("F3/11/2017", "1234567890"));
         assertFalse(validator.isPurchaseInvoiceInDB("F11/2017", "12345678"));

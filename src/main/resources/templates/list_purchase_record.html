@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/header :: header-css"/>
+    <title>Rejestr zakupu</title>
+</head>
+<body>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div class="starter-template">
+        <h1>Podsumowanie rejestru zakupu</h1>
+
+        <div th:if="${month} != null and ${year} != null">
+            <div class="alert alert-info">
+                Miesiąc:
+                <span th:text="${month}"></span>
+                Rok:
+                <span th:text="${year}"></span>
+            </div>
+        </div>
+
+        <div th:if="${error} != null">
+            <div class="alert alert-info">
+                <span th:text="${error}"></span>
+            </div>
+        </div>
+
+        <div th:if="${result} != null">
+            <div class="alert alert-info">
+                <span th:text="${result}"></span>
+            </div>
+        </div>
+
+        <div th:if="${record} != null">
+            <table class="record-table">
+                <caption>Zakupy niezaliczane do środków trwałych</caption>
+                <tr>
+                    <th>Suma netto 23%</th>
+                    <th>Suma VAT 23%</th>
+                    <th>Suma netto 8%</th>
+                    <th>Suma VAT 8%</th>
+                    <th>Suma netto 5%</th>
+                    <th>Suma VAT 5%</th>
+                    <th>Suma brutto</th>
+                </tr>
+                <tr>
+                    <td th:text="${record.sumNet23}"></td>
+                    <td th:text="${record.sumVat23}"></td>
+                    <td th:text="${record.sumNet8}"></td>
+                    <td th:text="${record.sumVat8}"></td>
+                    <td th:text="${record.sumNet5}"></td>
+                    <td th:text="${record.sumVat5}"></td>
+                    <td th:text="${record.sumGross}"></td>
+                </tr>
+            </table>
+
+            <table class="record-table">
+                <caption>Zakupy zaliczane do środków trwałych</caption>
+                <tr>
+                    <th>Suma netto</th>
+                    <th>Suma VAT</th>
+                    <th>Suma brutto</th>
+                </tr>
+                <tr>
+                    <td th:text="${record.sumFixedAssetsNet}"></td>
+                    <td th:text="${record.sumFixedAssetsVat}"></td>
+                    <td th:text="${record.sumFixedAssetsGross}"></td>
+                </tr>
+            </table>
+        </div>
+
+        <div th:if="${record == null}">
+            <span>Brak wygenerowanego rejestru zakupu</span>
+        </div>
+
+        <div id="formToGenReckoning">
+            <form th:action="@{/user/reckoning}" method="post">
+                <input type="hidden" name="month" th:attr="value = ${month}" />
+                <input type="hidden" name="year" th:attr="value = ${year}" />
+                <input type="submit" class="button" value="Generuj rozliczenie"/>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+<!-- /.container -->
+<div th:replace="fragments/footer :: footer"/>
+
+</body>
+</html>

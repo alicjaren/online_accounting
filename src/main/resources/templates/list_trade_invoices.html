@@ -27,7 +27,7 @@
                 <span th:text="${error}"></span>
             </div>
         </div>
-        
+
         <div th:if="${result} != null">
             <div class="alert alert-info">
                 <span th:text="${result}"></span>
@@ -50,6 +50,7 @@
                     <th>Netto 5%</th>
                     <th>VAT 5%</th>
                     <th>Brutto</th>
+                    <th>Usuwanie</th>
                 </tr>
                 <tr th:each="inv: ${invoices}">
                     <td th:text="${inv.dateOfIssue}"></td>
@@ -65,6 +66,14 @@
                     <td th:text="${inv.net5}"></td>
                     <td th:text="${inv.vat5}"></td>
                     <td th:text="${inv.gross}"></td>
+                    <td>
+                        <form th:action="@{/user/trade/invoice/deleting}" method="post">
+                            <input type="hidden" name="invoiceId" th:attr="value = ${inv.idTradeInvoice}" />
+                            <input type="hidden" name="invoiceNumber" th:attr="value = ${inv.invoiceNumber}" />
+                            <input type="submit" class="button" value="Usuń"/>
+                        </form>
+
+                    </td>
                 </tr>
             </table>
         </div>

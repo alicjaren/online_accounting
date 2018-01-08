@@ -20,30 +20,6 @@ public class RecordDaoImpl implements RecordDao {
     AddingToDB addingToDB = new AddingToDB();
 
 
-//    @Override
-//    //todo username uwzględnić
-//    public boolean isRecordInDB(int id, boolean tradeRecord){
-//        DatabaseConfig dbConfig = new DatabaseConfig();
-//        SessionFactory factory = dbConfig.sessionFactory();
-//        Session session = factory.openSession();
-//        List<Object> records;
-//        try {
-//            if(tradeRecord){
-//                records = session.createQuery("from TradeRecord where idTradeRecord=?")
-//                        .setParameter(0, id).list();
-//            }
-//            else{
-//                records = session.createQuery("from PurchaseRecord where idPurchaseRecord=?")
-//                        .setParameter(0, id).list();
-//            }
-//            session.close();
-//            return records.size() != 0;
-//        }catch (GenericJDBCException e){
-//            logger.info("Connection with DB error");
-//            return false;
-//        }
-//    }
-
     @Override
     public boolean isRecordInDBByName(String recordName, String userName, boolean tradeRecord){
 
@@ -60,38 +36,13 @@ public class RecordDaoImpl implements RecordDao {
     public boolean addTradeRecord(TradeRecord tradeRecord) {
 
         return addingToDB.addToDB(tradeRecord);
-        /*DatabaseConfig dbConfig = new DatabaseConfig();
-        SessionFactory factory = dbConfig.sessionFactory();
-        Session session = factory.openSession();
-        try {
-            session.save(tradeRecord);
-            Transaction tx = session.beginTransaction();
-            tx.commit();
-            session.close();
-            return true;
-        }catch (GenericJDBCException e){
-            logger.info("Connection with DB error");
-            return false;
-        }*/
     }
 
     @Override
     public boolean addPurchaseRecord(PurchaseRecord purchaseRecord) {
 
         return addingToDB.addToDB(purchaseRecord);
-        /*DatabaseConfig dbConfig = new DatabaseConfig();
-        SessionFactory factory = dbConfig.sessionFactory();
-        Session session = factory.openSession();
-        try {
-            session.save(purchaseRecord);
-            Transaction tx = session.beginTransaction();
-            tx.commit();
-            session.close();
-            return true;
-        }catch (GenericJDBCException e){
-            logger.info("Connection with DB error");
-            return false;
-        }*/
+
     }
 
 
