@@ -32,10 +32,6 @@ public class WelcomeController {
 
     @RequestMapping("/user")
     public String user(HttpServletRequest request) {
-       /* Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if(auth.isAuthenticated()){
-            return "/user";
-        }*/
         return "/user";
     }
 
