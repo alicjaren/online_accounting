@@ -24,22 +24,22 @@ public class DBInvoicesTest {
 
     //@Test
     public void testAddTradeInvoice(){
-        TradeRecord tradeRecord = recordDao.getTradeRecord("12/2017", "user1");
-        Date dateOfIssue = new Calendar.Builder().setDate(2017, 11, 29).build().getTime();
-        TradeInvoice tradeInvoice = new TradeInvoice("68/2017", dateOfIssue,1234567890,
-                "Mroczek", "pszenżyto", 100.00, 0.00, 0.00,
-                23.00, 0.00, 0.00, 123.00, tradeRecord);
+        TradeRecord tradeRecord = recordDao.getTradeRecord("1/2018", "user1");
+        Date dateOfIssue = new Calendar.Builder().setDate(2018, 1, 7).build().getTime();
+        TradeInvoice tradeInvoice = new TradeInvoice("4/2017", dateOfIssue,1234567890,
+                "GR Pomorze", "materiał siewny - kukurydza", 0, 1000, 0.00,
+                0, 230.00, 0.00, 1230.00, tradeRecord);
         logger.info("\nDodaję fakturę!!!!!!!\n");
         assertTrue(invoiceDao.addTradeInvoice(tradeInvoice));
     }
 
-    //@Test
+   // @Test
     public void testAddPurchaseInvoice(){
-        PurchaseRecord purchaseRecord = recordDao.getPurchaseRecord("11/2017", "user1");
-        Date dateOfIssue = new Calendar.Builder().setDate(2017, 11, 30).build().getTime();
-        PurchaseInvoice purchaseInvoice = new PurchaseInvoice("F123/11/2017", dateOfIssue, 1234567890,
-        "Sklep ogrodniczy Stokrotka", "nasiona tymotki", 0.00, 0.00, 100.00, 0.00, 0.00, 5.00, 105.00,
-                true, 0.00, 0.00, 0.00, purchaseRecord);
+        PurchaseRecord purchaseRecord = recordDao.getPurchaseRecord("1/2018", "user1");
+        Date dateOfIssue = new Calendar.Builder().setDate(2018, 1, 9).build().getTime();
+        PurchaseInvoice purchaseInvoice = new PurchaseInvoice("Fv123ST/1/2018", dateOfIssue, 1234567890,
+        "Przedsiębiorstwo Handlowe Korbanek", "przyczepa Zasław 10t", 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+                true, 60000.00, 13800.00, 73800.00, purchaseRecord);
         assertTrue(invoiceDao.addPurchaseInvoice(purchaseInvoice));
     }
 

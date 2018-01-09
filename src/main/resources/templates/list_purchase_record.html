@@ -77,7 +77,7 @@
         </div>
 
         <div id="formToGenReckoning">
-            <form th:action="@{/user/reckoning}" method="post">
+            <form th:action="@{/user/reckoning/generating}" method="post">
                 <input type="hidden" name="month" th:attr="value = ${month}" />
                 <input type="hidden" name="year" th:attr="value = ${year}" />
                 <input type="submit" class="button" value="Generuj rozliczenie"/>

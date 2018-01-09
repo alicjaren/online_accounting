@@ -2,9 +2,8 @@ package com.example.demo.persons.dao;
 
 import com.example.demo.config.DatabaseConfig;
 import com.example.demo.persons.model.Person;
-import com.example.demo.service.AddingToDB;
+import com.example.demo.service.DBOperations;
 import com.example.demo.users.dao.UserDaoImpl;
-import com.example.demo.users.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -18,7 +17,7 @@ import java.util.logging.Logger;
 public class PersonDaoImpl implements PersonDao {
 
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
-    private AddingToDB addingToDB = new AddingToDB();
+    private DBOperations DBOperations = new DBOperations();
 
     @Override
     public Person findByUserName(String username) {
@@ -46,7 +45,7 @@ public class PersonDaoImpl implements PersonDao {
 
     @Override
     public boolean addNewPerson(Person person) {
-        return addingToDB.addToDB(person);
+        return DBOperations.addToDB(person);
         /*DatabaseConfig dbConfig = new DatabaseConfig();
         SessionFactory factory = dbConfig.sessionFactory();
         Session session = factory.openSession();

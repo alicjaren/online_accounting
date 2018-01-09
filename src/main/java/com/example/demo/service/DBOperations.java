@@ -9,7 +9,7 @@ import org.hibernate.exception.GenericJDBCException;
 
 import java.util.logging.Logger;
 
-public class AddingToDB {
+public class DBOperations {
 
     Logger logger = Logger.getLogger("");
 
@@ -37,6 +37,24 @@ public class AddingToDB {
 
         try{
             session.delete(o);
+            Transaction tx = session.beginTransaction();
+            tx.commit();
+            session.close();
+            return true;
+        }catch(GenericJDBCException e) {
+            System.out.println("Connection with DB error");
+            session.close();
+            return false;
+        }
+    }
+
+    public boolean updateInDB(Object o){
+        DatabaseConfig dbConfig = new DatabaseConfig();
+        SessionFactory factory = dbConfig.sessionFactory();
+        Session session = factory.openSession();
+
+        try{
+            session.update(o);
             Transaction tx = session.beginTransaction();
             tx.commit();
             session.close();

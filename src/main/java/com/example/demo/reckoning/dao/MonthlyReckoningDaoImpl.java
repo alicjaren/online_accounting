@@ -1,14 +1,12 @@
 package com.example.demo.reckoning.dao;
 
 import com.example.demo.config.DatabaseConfig;
-import com.example.demo.invoices.model.TradeInvoice;
 import com.example.demo.reckoning.model.MonthlyReckoning;
-import com.example.demo.service.AddingToDB;
+import com.example.demo.service.DBOperations;
 import com.example.demo.users.dao.UserDaoImpl;
 import com.example.demo.users.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.exception.GenericJDBCException;
 
 import java.util.List;
@@ -17,7 +15,7 @@ import java.util.logging.Logger;
 public class MonthlyReckoningDaoImpl implements MonthlyReckoningDao{
 
     Logger logger = Logger.getLogger("");
-    AddingToDB addingToDB = new AddingToDB();
+    DBOperations DBOperations = new DBOperations();
 
 
     @Override
@@ -45,7 +43,7 @@ public class MonthlyReckoningDaoImpl implements MonthlyReckoningDao{
         if (isMonthlyReckoningInDBByName(monthlyReckoning.getName(), monthlyReckoning.getUser().getUsername())){
             return false;
         }
-        return addingToDB.addToDB(monthlyReckoning);
+        return DBOperations.addToDB(monthlyReckoning);
 
         /*
         DatabaseConfig dbConfig = new DatabaseConfig();

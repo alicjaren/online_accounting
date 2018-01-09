@@ -1,23 +1,16 @@
 package com.example.demo.reckoning.dao;
 
-import com.example.demo.config.DatabaseConfig;
 import com.example.demo.reckoning.model.MonthlyReckoning;
 import com.example.demo.reckoning.model.PurchaseRecord;
 import com.example.demo.reckoning.model.TradeRecord;
-import com.example.demo.service.AddingToDB;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.exception.GenericJDBCException;
+import com.example.demo.service.DBOperations;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
 public class RecordDaoImpl implements RecordDao {
 
     Logger logger = Logger.getLogger("");
-    AddingToDB addingToDB = new AddingToDB();
+    DBOperations DBOperations = new DBOperations();
 
 
     @Override
@@ -35,13 +28,13 @@ public class RecordDaoImpl implements RecordDao {
     @Override
     public boolean addTradeRecord(TradeRecord tradeRecord) {
 
-        return addingToDB.addToDB(tradeRecord);
+        return DBOperations.addToDB(tradeRecord);
     }
 
     @Override
     public boolean addPurchaseRecord(PurchaseRecord purchaseRecord) {
 
-        return addingToDB.addToDB(purchaseRecord);
+        return DBOperations.addToDB(purchaseRecord);
 
     }
 

@@ -11,6 +11,7 @@ import com.example.demo.reckoning.dao.RecordDaoImpl;
 import com.example.demo.reckoning.model.MonthlyReckoning;
 import com.example.demo.reckoning.model.PurchaseRecord;
 import com.example.demo.reckoning.model.TradeRecord;
+import com.example.demo.reckoning.service.ReckoningGenerator;
 import com.example.demo.users.dao.UserDaoImpl;
 import com.example.demo.users.model.User;
 
@@ -31,6 +32,7 @@ public class UserOperation {
     private InvoiceValidator validator = new InvoiceValidator();
     private RecordDaoImpl recordDao = new RecordDaoImpl();
     private InvoiceDaoImpl invoiceDao = new InvoiceDaoImpl();
+    private ReckoningGenerator reckoningGenerator = new ReckoningGenerator();
 
     public String addTradeInvoiceToDB(String username, String invoiceNumber, String dateOfIssue, String tradePartnerNIP,
                                       String tradePartnerName, String dealingThingName, double net23, double net8,
@@ -58,19 +60,27 @@ public class UserOperation {
 
             if (tradeRecord ==  null){ //create monthly reckoning, trade and purchase records
                 logger.info("Create new monthlyReckoning, tradeRecord and purchaseRecord.");
-                tradeRecord = new TradeRecord(recordName);
-                PurchaseRecord newPurchaseRecord = new PurchaseRecord(recordName);
-                UserDaoImpl userDao = new UserDaoImpl();
-                User user = userDao.getUser(username);
-                MonthlyReckoning newMonthlyReckoning = new MonthlyReckoning(recordName,0,0,
-                        0, 0, 0, user, tradeRecord, newPurchaseRecord);
-                MonthlyReckoningDaoImpl monthlyReckoningDao = new MonthlyReckoningDaoImpl();
-
-                if (!monthlyReckoningDao.addMonthlyReckoning(newMonthlyReckoning)){
+//                tradeRecord = new TradeRecord(recordName);
+//                PurchaseRecord newPurchaseRecord = new PurchaseRecord(recordName);
+//                UserDaoImpl userDao = new UserDaoImpl();
+//                User user = userDao.getUser(username);
+//                MonthlyReckoning newMonthlyReckoning = new MonthlyReckoning(recordName,0,0,
+//                        0, 0, 0, user, tradeRecord, newPurchaseRecord);
+//                MonthlyReckoningDaoImpl monthlyReckoningDao = new MonthlyReckoningDaoImpl();
+//
+//                if (!monthlyReckoningDao.addMonthlyReckoning(newMonthlyReckoning)){
+//                    logger.info("Error by create new monthlyReckoning!");
+//                    return "Przepraszamy błąd podczas połączenia z bazą danych i przypisywania faktury do rejestru";
+//                }
+                if(!reckoningGenerator.createRecords(username, recordName)){
                     logger.info("Error by create new monthlyReckoning!");
                     return "Przepraszamy błąd podczas połączenia z bazą danych i przypisywania faktury do rejestru";
                 }
+                tradeRecord =  recordDao.getTradeRecord(recordName, username);
             }
+
+
+
             TradeInvoice tradeInvoice = new TradeInvoice(invoiceNumber, date, Long.valueOf(tradePartnerNIP), tradePartnerName,
                 dealingThingName, net23, net8, net5, vat23, vat8, vat5, gross, tradeRecord);
 
@@ -146,18 +156,23 @@ public class UserOperation {
             PurchaseRecord purchaseRecord = recordDao.getPurchaseRecord(recordName, username);
             if (purchaseRecord == null){//create monthly reckoning, trade and purchase records
                 logger.info("Create new monthlyReckoning, tradeRecord and purchaseRecord.");
-                TradeRecord tradeRecord = new TradeRecord(recordName);
-                purchaseRecord = new PurchaseRecord(recordName);
-                UserDaoImpl userDao = new UserDaoImpl();
-                User user = userDao.getUser(username);
-                MonthlyReckoning newMonthlyReckoning = new MonthlyReckoning(recordName,0,0,
-                        0, 0, 0, user, tradeRecord, purchaseRecord);
-                MonthlyReckoningDaoImpl monthlyReckoningDao = new MonthlyReckoningDaoImpl();
-
-                if (!monthlyReckoningDao.addMonthlyReckoning(newMonthlyReckoning)){
+//                TradeRecord tradeRecord = new TradeRecord(recordName);
+//                purchaseRecord = new PurchaseRecord(recordName);
+//                UserDaoImpl userDao = new UserDaoImpl();
+//                User user = userDao.getUser(username);
+//                MonthlyReckoning newMonthlyReckoning = new MonthlyReckoning(recordName,0,0,
+//                        0, 0, 0, user, tradeRecord, purchaseRecord);
+//                MonthlyReckoningDaoImpl monthlyReckoningDao = new MonthlyReckoningDaoImpl();
+//
+//                if (!monthlyReckoningDao.addMonthlyReckoning(newMonthlyReckoning)){
+//                    logger.info("Error by create new monthlyReckoning!");
+//                    return "Przepraszamy błąd podczas połączenia z bazą danych i przypisywania faktury do rejestru";
+//                }
+                if(!reckoningGenerator.createRecords(username, recordName)){
                     logger.info("Error by create new monthlyReckoning!");
                     return "Przepraszamy błąd podczas połączenia z bazą danych i przypisywania faktury do rejestru";
                 }
+                purchaseRecord = recordDao.getPurchaseRecord(recordName, username);
             }
 
             PurchaseInvoice purchaseInvoice = new PurchaseInvoice(invoiceNumber, date, Long.valueOf(tradePartnerNIP),
@@ -260,5 +275,16 @@ public class UserOperation {
 
     public PurchaseRecord getPurchaseRecord(String username, String purchaseRecordName) {
         return recordDao.getPurchaseRecord(purchaseRecordName, username);
+    }
+
+    public String generateMonthlyReckoning(String userName, String reckoningName) {
+        //todo sprawdzić, czy nie jest to stare rozliczenie, które już istnieje, wtedy pytanie o potwierdzenie
+        ReckoningGenerator reckoningGenerator = new ReckoningGenerator();
+        if(reckoningGenerator.generateReckoning(userName, reckoningName)){
+            return "SUCCESS";
+        }
+        else{
+            return "Przepraszamy, wystąpiły błędy techniczne. Prosimy spóbować ponownie.";
+        }
     }
 }

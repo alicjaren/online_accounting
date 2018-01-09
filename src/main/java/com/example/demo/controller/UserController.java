@@ -285,4 +285,38 @@ public class UserController {
         return "/list_purchase_record";
     }
 
+    @RequestMapping("/user/reckoning/generating")
+    public String getGeneratingMonthlyReckoningForm(Model model){
+        model.addAttribute("registerName", " rozliczenia miesiecznego do wygenerowania");
+        model.addAttribute("url", "/user/reckoning/generating");
+        return "/get_register";
+    }
+
+    @RequestMapping(value = "/user/reckoning/generating", method = RequestMethod.POST)
+    public String generateMonthlyReckoning(@RequestParam("month") String month,
+                                           @RequestParam("year") String year,
+                                           Model model){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); //get logged in username
+
+        UserOperation userOperation = new UserOperation();
+        String reckoningName = month + "/" + year;
+        logger.info("Generate monthly reckoning: " + reckoningName + " for user " + username);
+
+        String result = userOperation.generateMonthlyReckoning(username, reckoningName);
+
+        if(result.equals("SUCCESS")){
+            TradeRecord tradeRecord = userOperation.getTradeRecord(username, reckoningName);
+            PurchaseRecord purchaseRecord = userOperation.getPurchaseRecord(username, reckoningName);
+        }
+        else{
+            model.addAttribute("error", result);
+        }
+
+        return "trade record, purchase record, wstepny monthly reckoning i pytanie o kwoty do przenieisienia/zwrotu" +
+                "gdy jest nadwyzka, gdy  nie ma user/reckoning/listing i info";
+    }
+
+    //@RequestMapping("/user/reckonning/listing") todo
 }

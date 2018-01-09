@@ -3,7 +3,7 @@ package com.example.demo.invoices.dao;
 import com.example.demo.config.DatabaseConfig;
 import com.example.demo.invoices.model.PurchaseInvoice;
 import com.example.demo.invoices.model.TradeInvoice;
-import com.example.demo.service.AddingToDB;
+import com.example.demo.service.DBOperations;
 import com.example.demo.users.dao.UserDaoImpl;
 import com.example.demo.users.model.User;
 import org.hibernate.Session;
@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 public class InvoiceDaoImpl implements InvoiceDao {
 
-    private AddingToDB dbOperation = new AddingToDB();
+    private DBOperations dbOperation = new DBOperations();
     private UserDaoImpl userDao = new UserDaoImpl();
     private Logger logger = Logger.getAnonymousLogger();
 

@@ -241,4 +241,6 @@ public class PurchaseInvoice {
     public void setPurchaseRecord(PurchaseRecord purchaseRecord) {
         this.purchaseRecord = purchaseRecord;
     }
+
+
 }

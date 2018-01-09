@@ -1,28 +1,19 @@
 package com.example.demo.users.dao;
 
-import java.io.Serializable;
-import java.sql.Connection;
 import java.util.*;
 import java.util.logging.Logger;
 
 import com.example.demo.config.DatabaseConfig;
 import com.example.demo.config.SpringSecurityConfig;
-import com.example.demo.service.AddingToDB;
+import com.example.demo.service.DBOperations;
 import com.example.demo.users.model.User;
 import com.example.demo.users.model.UserRole;
 import org.hibernate.*;
-import org.hibernate.engine.spi.FilterDefinition;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.exception.GenericJDBCException;
-import org.hibernate.metadata.ClassMetadata;
-import org.hibernate.metadata.CollectionMetadata;
-import org.hibernate.stat.Statistics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
-
-import javax.naming.NamingException;
-import javax.naming.Reference;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -30,7 +21,7 @@ public class UserDaoImpl implements UserDao {
     @Autowired
     private SessionFactory sessionFactory;
     private Logger logger = Logger.getAnonymousLogger();
-    private AddingToDB addingToDB = new AddingToDB();
+    private DBOperations DBOperations = new DBOperations();
 
     @SuppressWarnings("unchecked")
     public User findByUserName(String username) {
@@ -51,7 +42,7 @@ public class UserDaoImpl implements UserDao {
 
     public boolean newUserRegistration(User user, UserRole userRole){
 
-        return addingToDB.addToDB(user) && addingToDB.addToDB(userRole);
+        return DBOperations.addToDB(user) && DBOperations.addToDB(userRole);
         /*DatabaseConfig dbConfig = new DatabaseConfig();
         SessionFactory factory = dbConfig.sessionFactory();
         Session session = factory.openSession();
