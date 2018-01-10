@@ -15,6 +15,7 @@ import com.example.demo.reckoning.service.ReckoningGenerator;
 import com.example.demo.users.dao.UserDaoImpl;
 import com.example.demo.users.model.User;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import javax.swing.text.TabableView;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,6 +23,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -277,14 +279,31 @@ public class UserOperation {
         return recordDao.getPurchaseRecord(purchaseRecordName, username);
     }
 
-    public String generateMonthlyReckoning(String userName, String reckoningName) {
-        //todo sprawdzić, czy nie jest to stare rozliczenie, które już istnieje, wtedy pytanie o potwierdzenie
+    public Map<String, Integer> generateMonthlyReckoning(String userName, String reckoningName) {
+
         ReckoningGenerator reckoningGenerator = new ReckoningGenerator();
-        if(reckoningGenerator.generateReckoning(userName, reckoningName)){
-            return "SUCCESS";
+        return reckoningGenerator.generateReckoning(userName, reckoningName);
+    }
+
+
+    public String validateDeclarationData(Integer overhang, String sumForClient, String in25days, String in60days, String in180days) {
+
+        if(overhang == 0){
+            logger.info("Refund for client is impossible. Overhang = 0.");
+            return "Nadwyżka podaktu należnego nad naliczonym. Brak możliwości otrzymania zwrotu podatku.";
         }
-        else{
-            return "Przepraszamy, wystąpiły błędy techniczne. Prosimy spóbować ponownie.";
+
+        if(Integer.valueOf(sumForClient) > overhang){
+            logger.info("Sum for client invalid > overhang");
+            return "Suma do zwrotu na rachunek bankowy nie może przekraczać nadwyżki podatku = " + overhang;
         }
+
+        Integer sumOfRefund = Integer.valueOf(in25days) + Integer.valueOf(in60days) + Integer.valueOf(in180days);
+        if(!sumOfRefund.equals(Integer.valueOf(sumForClient))){
+            logger.info("Sum of refund (in 25, 60 and 180 days) must be equals to sumForClient");
+            return "Suma zwrotów w terminach: 25, 60, 180 dni, podana jako: "  + sumOfRefund +
+                    " musi być zgodna  z całkowitą sumą zwrotu = " + sumForClient;
+        }
+        return "VALID";
     }
 }

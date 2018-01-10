@@ -11,4 +11,6 @@ public interface MonthlyReckoningDao {
 
     MonthlyReckoning getMonthlyReckoning(String userName, String reckoningName);
 
+    String getPreviousReckoningName(String currentReckoningName);
+
 }

@@ -15,24 +15,26 @@
         <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
             <form th:action="@{/login}" method="post">
                 <fieldset>
-                    <h1>Please Sign In</h1>
+                    <h1>Logowanie</h1>
 
                     <div th:if="${param.error}">
                         <div class="alert alert-danger">
-                            Invalid username and password.
+                            Błędna nazwa użytkownika lub hasło.
                         </div>
                     </div>
                     <div th:if="${param.logout}">
                         <div class="alert alert-info">
-                            You have been logged out.
+                            Wylogowano pomyślnie.
                         </div>
                     </div>
 
                     <div class="form-group">
+                        <label for="username" class="invoiceEl" data-icon="p"> Login </label>
                         <input type="text" name="username" id="username" class="form-control input-lg"
                                placeholder="UserName" required="true" autofocus="true"/>
                     </div>
                     <div class="form-group">
+                        <label for="password" class="invoiceEl" data-icon="p"> Hasło </label>
                         <input type="password" name="password" id="password" class="form-control input-lg"
                                placeholder="Password" required="true"/>
                     </div>

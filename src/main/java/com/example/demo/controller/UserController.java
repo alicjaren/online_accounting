@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Controller
 public class UserController {
 
     private Logger logger = Logger.getAnonymousLogger();
+    private UserOperation userOperation = new UserOperation();
 
     @RequestMapping("/user/password/changing")
     public String getChangingPasswordForm(Model model){
@@ -154,7 +155,7 @@ public class UserController {
         model.addAttribute("month", month);
         model.addAttribute("year", year);
         String tradeRecordName = month + "/" + year;
-        UserOperation userOperation = new UserOperation();
+        //UserOperation userOperation = new UserOperation();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
 
@@ -180,7 +181,7 @@ public class UserController {
         model.addAttribute("month", month);
         model.addAttribute("year", year);
         String purchaseRecordName = month + "/" + year;
-        UserOperation userOperation = new UserOperation();
+        //UserOperation userOperation = new UserOperation();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
 
@@ -197,7 +198,7 @@ public class UserController {
     public String deleteTradeInvoice(@RequestParam("invoiceId") String invoiceId,
                                      @RequestParam("invoiceNumber") String invoiceNumber, Model model){
 
-        UserOperation userOperation = new UserOperation();
+        //UserOperation userOperation = new UserOperation();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
         logger.info("Deleting trade invoice number: " + invoiceNumber + " id: " + invoiceId + " by user " + username);
@@ -218,7 +219,7 @@ public class UserController {
                                         @RequestParam("invoiceNumber") String invoiceNumber,
                                         @RequestParam("tradePartnerNIP") String tradePartnerNIP,  Model model){
 
-        UserOperation userOperation = new UserOperation();
+        //UserOperation userOperation = new UserOperation();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
         logger.info("Deleting purchase invoice number: " + invoiceNumber + " id: " + invoiceId + " by user " + username);
@@ -247,7 +248,7 @@ public class UserController {
         model.addAttribute("month", month);
         model.addAttribute("year", year);
         String tradeRecordName = month + "/" + year;
-        UserOperation userOperation = new UserOperation();
+        //UserOperation userOperation = new UserOperation();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
 
@@ -273,7 +274,7 @@ public class UserController {
         model.addAttribute("month", month);
         model.addAttribute("year", year);
         String purchaseRecordName = month + "/" + year;
-        UserOperation userOperation = new UserOperation();
+        //UserOperation userOperation = new UserOperation();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
 
@@ -300,23 +301,75 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
 
-        UserOperation userOperation = new UserOperation();
+        //UserOperation userOperation = new UserOperation();
         String reckoningName = month + "/" + year;
         logger.info("Generate monthly reckoning: " + reckoningName + " for user " + username);
 
-        String result = userOperation.generateMonthlyReckoning(username, reckoningName);
-
-        if(result.equals("SUCCESS")){
-            TradeRecord tradeRecord = userOperation.getTradeRecord(username, reckoningName);
-            PurchaseRecord purchaseRecord = userOperation.getPurchaseRecord(username, reckoningName);
+        boolean isOldReckoning = false;
+        //todo sprawdzić, czy nie jest to stare rozliczenie, które już istnieje, wtedy pytanie o potwierdzenie
+        if(isOldReckoning){
+            model.addAttribute("error", "Taka deklaracja powinna już zostać złożona w Urzędzie Skarobowym." +
+                    " Czy chcesz ją wygenerować ponownie?");
         }
+
+        Map<String, Integer> preDeclaration = userOperation.generateMonthlyReckoning(username, reckoningName);
+
+        if(preDeclaration != null){
+
+            model.addAttribute("month", month);
+            model.addAttribute("year", year);
+            model.addAttribute("map", preDeclaration);
+
+            if(preDeclaration.get("overhang") == 0){ //tax for revenue, final reckoning is updated
+                logger.info("Final declaration is updating, overhang = 0.");
+                return "/declaration";
+            }
+
+            else{
+                logger.info("PreDeclaration is generated, sum of refunds is required");
+                return "/get_final_declaration";
+            }
+        }
+
         else{
-            model.addAttribute("error", result);
+            model.addAttribute("error", "Przepraszamy, wystąpiły błędy techniczne. Prosimy spóbować ponownie.");
+            return "/user/reckoning/generating";
         }
-
-        return "trade record, purchase record, wstepny monthly reckoning i pytanie o kwoty do przenieisienia/zwrotu" +
-                "gdy jest nadwyzka, gdy  nie ma user/reckoning/listing i info";
     }
 
-    //@RequestMapping("/user/reckonning/listing") todo
+    @RequestMapping(value = "/user/declaration", method = RequestMethod.POST)
+    public String generateFinalDeclaration(@RequestParam("month") String month,
+                                           @RequestParam("year") String year,
+                                           @RequestParam("sumForClient") String sumForClient,
+                                           @RequestParam("in25days") String in25days,
+                                           @RequestParam("in60days") String in60days,
+                                           @RequestParam("in180days") String in180days,
+                                           Model model){
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); //get logged in username
+
+        logger.info("Generating final declaration for user: " + username + " month: " + month +  " year: " + year +
+            " forClient: " + sumForClient + " in25: " + in25days + " in60: " + in60days + " in180: " + in180days);
+
+        String reckoningName = month + "/" + year;
+        Map<String, Integer> preDeclaration = userOperation.generateMonthlyReckoning(username, reckoningName);
+
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
+
+
+        String result = userOperation.validateDeclarationData(preDeclaration.get("overhang"), sumForClient, in25days, in60days, in180days);
+        if(!result.equals("VALID")){
+            model.addAttribute("map", preDeclaration);
+            model.addAttribute("error", result);
+            return  "/get_final_declaration";
+        }
+
+        //todo 2. wygenerować końcową deklarację i wyświetlić
+        return "/declaration";
+    }
+
+    //@RequestMapping("/user/declaration") - podgląd deklaracji ???
+
 }

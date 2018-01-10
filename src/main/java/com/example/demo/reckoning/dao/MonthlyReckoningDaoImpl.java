@@ -89,4 +89,18 @@ public class MonthlyReckoningDaoImpl implements MonthlyReckoningDao{
 
     }
 
+    @Override
+    public String getPreviousReckoningName(String currentReckoningName){
+        String [] parts = currentReckoningName.split("/");
+        int currentMonth = Integer.valueOf(parts[0]);
+        int currentYear = Integer.valueOf(parts[1]);
+        if(currentMonth == 1){
+            return "12/" + (currentYear-1);
+
+        }
+        else{
+            return (currentMonth-1) + "/" + currentYear;
+        }
+    }
+
 }

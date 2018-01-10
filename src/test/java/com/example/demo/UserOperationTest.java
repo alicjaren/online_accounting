@@ -57,4 +57,12 @@ public class UserOperationTest {
         assertEquals("Usunięcie nie jest możlwie. Taka faktura nie istnieje w bazie lub należy do innego użytkownika.", userOperation.deleteTradeInvoiceFromDB("22a/2017", "user1", "12"));
 
     }
+
+    //@Test
+    public void testValidateDeclarationData(){
+        assertEquals("VALID", userOperation.validateDeclarationData(100, "80", "10", "0", "70"));
+        assertEquals("Nadwyżka podaktu należnego nad naliczonym. Brak możliwości otrzymania zwrotu podatku.", userOperation.validateDeclarationData(0, "80", "10", "0", "70"));
+        assertEquals("Suma do zwrotu na rachunek bankowy nie może przekraczać nadwyżki podatku = 40", userOperation.validateDeclarationData(40, "80", "10", "0", "70"));
+        assertEquals("Suma zwrotów w terminach: 25, 60, 180 dni, podana jako: 110 musi być zgodna  z całkowitą sumą zwrotu = 80",  userOperation.validateDeclarationData(100, "80", "10", "0", "100"));
+    }
 }

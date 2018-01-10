@@ -48,4 +48,10 @@ public class DBReckoningTest {
         assertNotNull(monthlyReckoningDao.getMonthlyReckoning("user1", "12/2017"));
     }
 
+    @Test
+    public void testGetPreviousReckoningName(){
+        assertEquals("12/2017", monthlyReckoningDao.getPreviousReckoningName("1/2018"));
+        assertEquals("1/2018", monthlyReckoningDao.getPreviousReckoningName("2/2018"));
+    }
+
 }

@@ -106,24 +106,12 @@ public class InvoiceDaoImpl implements InvoiceDao {
 
     @Override
     public boolean deleteTradeInvoice(String IdTradeInvoice) {
-//        DatabaseConfig dbConfig = new DatabaseConfig();
-//        SessionFactory factory = dbConfig.sessionFactory();
-//        Session session = factory.openSession();
+
         TradeInvoice tradeInvoice = new TradeInvoice();
         tradeInvoice.setIdTradeInvoice(Integer.parseInt(IdTradeInvoice));
 
         return dbOperation.deleteFromDB(tradeInvoice);
-//        try{
-//            session.delete(tradeInvoice);
-//            Transaction tx = session.beginTransaction();
-//            tx.commit();
-//            session.close();
-//            return true;
-//        }catch(GenericJDBCException e) {
-//            System.out.println("Connection with DB error");
-//            session.close();
-//            return false;
-//        }
+
     }
 
     @Override
