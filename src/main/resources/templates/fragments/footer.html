@@ -10,11 +10,15 @@
 
         <footer>
             <!-- this is footer -->
-            <span sec:authorize="isAuthenticated()">
-                | Zalogowany użytkowik: <span sec:authentication="name"></span> |
-                Rola: <span sec:authentication="principal.authorities"></span> |
-                <a th:href="@{/logout}">Wylogowanie</a>
-            </span>
+            <div th:if="${person} != null">
+                <div class="alert alert-info">
+                    Zalogowany użytkownik: <span th:text="${person}"></span>
+                </div>
+            </div>
+            <!--<span sec:authorize="isAuthenticated()">-->
+                <!--| Zalogowany użytkowik: <span sec:authentication="name"></span> |-->
+                <!--Rola: <span sec:authentication="principal.authorities"></span> |-->
+            <!--</span>-->
 
             <script type="text/javascript"
                     src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>

@@ -41,23 +41,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     public boolean newUserRegistration(User user, UserRole userRole){
-
         return DBOperations.addToDB(user) && DBOperations.addToDB(userRole);
-        /*DatabaseConfig dbConfig = new DatabaseConfig();
-        SessionFactory factory = dbConfig.sessionFactory();
-        Session session = factory.openSession();
-        try {
-            session.save(user);
-            session.save(userRole);
-            Transaction tx = session.beginTransaction();
-            tx.commit();
-            session.close();
-            return true;
-        }catch (GenericJDBCException e){
-            //session.getTransaction().rollback();
-            System.out.println("Connection with DB error");
-            return false;
-        }*/
     }
 
     public boolean isUserInDB(String userName){

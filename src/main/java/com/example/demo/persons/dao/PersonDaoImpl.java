@@ -46,20 +46,6 @@ public class PersonDaoImpl implements PersonDao {
     @Override
     public boolean addNewPerson(Person person) {
         return DBOperations.addToDB(person);
-        /*DatabaseConfig dbConfig = new DatabaseConfig();
-        SessionFactory factory = dbConfig.sessionFactory();
-        Session session = factory.openSession();
-        try {
-            session.save(person);
-            Transaction tx = session.beginTransaction();
-            tx.commit();
-            session.close();
-            return true;
-        }catch (GenericJDBCException e){
-            //session.getTransaction().rollback();
-            LOGGER.info("Connection with DB error");
-            return false;
-        }*/
     }
 
     @Override

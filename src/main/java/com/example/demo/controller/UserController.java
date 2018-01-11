@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import com.example.demo.admin.operation.model.AdminOperation;
 import com.example.demo.invoices.model.PurchaseInvoice;
 import com.example.demo.invoices.model.TradeInvoice;
+import com.example.demo.persons.dao.PersonDaoImpl;
+import com.example.demo.persons.model.Person;
 import com.example.demo.reckoning.model.PurchaseRecord;
 import com.example.demo.reckoning.model.TradeRecord;
 import com.example.demo.user.operation.model.UserOperation;
@@ -24,9 +26,14 @@ public class UserController {
 
     private Logger logger = Logger.getAnonymousLogger();
     private UserOperation userOperation = new UserOperation();
+    private PersonDaoImpl personDao = new PersonDaoImpl();
 
     @RequestMapping("/user/password/changing")
     public String getChangingPasswordForm(Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); //get logged in username
+        Person person = personDao.findByUserName(username);
+        model.addAttribute("person", person.getName() + " " + person.getSurname());
         return "/change_password";
     }
 
@@ -43,6 +50,7 @@ public class UserController {
 
         AdminOperation admin = new AdminOperation();
         String result = admin.changePassword(name, currentPassword, newPassword, newPassword2);
+        model.addAttribute("person", getPersonNameAndSurname());
 
         if (request.isUserInRole("ROLE_ADMIN")){
             model.addAttribute("admin", "true");
@@ -62,7 +70,8 @@ public class UserController {
     }
 
     @RequestMapping("/user/trade/invoice/adding")
-    public String getAddingTradeInvoiceForm() {
+    public String getAddingTradeInvoiceForm(Model model) {
+        model.addAttribute("person", getPersonNameAndSurname());
         return "/add_trade_invoice";
     }
 
@@ -80,6 +89,7 @@ public class UserController {
         logger.info("Adding tradeInvoice: number: " + invoiceNumber + " data: " + dateOfIssue + " partnerNIP: " + tradePartnerNIP +
         " partnerName: " + tradePartnerName + " dealingThing: " + dealingThingName + " gross: " + gross);
 
+        model.addAttribute("person", getPersonNameAndSurname());
         UserOperation userOperation = new UserOperation();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
@@ -99,7 +109,8 @@ public class UserController {
     }
 
     @RequestMapping("/user/purchase/invoice/adding")
-    public String getAddingPurchaseInvoiceForm() {
+    public String getAddingPurchaseInvoiceForm(Model model) {
+        model.addAttribute("person", getPersonNameAndSurname());
         return "/add_purchase_invoice";
     }
 
@@ -127,6 +138,7 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
 
+        model.addAttribute("person", getPersonNameAndSurname());
         String result = userOperation.addPurchaseInvoiceToDB(username, invoiceNumber, dateOfIssue, tradePartnerNIP,
                 tradePartnerName, dealingThingName, net23, net8, net5, vat23, vat8, vat5, gross, deducted,
                 fixedAssetsNet, fixedAssetsVat, fixedAssetsGross);
@@ -146,6 +158,7 @@ public class UserController {
     public String getListingTradeInvoicesForm(Model model){
         model.addAttribute("registerName", " rejestru faktur sprzedaży:");
         model.addAttribute("url", "/user/trade/invoice/listing");
+        model.addAttribute("person", getPersonNameAndSurname());
         return "/get_register";
     }
 
@@ -158,6 +171,7 @@ public class UserController {
         //UserOperation userOperation = new UserOperation();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
+        model.addAttribute("person", getPersonNameAndSurname());
 
         logger.info("Listing of trade invoices for user: " + username + " for month: " + month + " and year: " + year);
 
@@ -172,6 +186,8 @@ public class UserController {
     public String getListingPurchaseInvoicesForm(Model model){
         model.addAttribute("registerName", " rejestru faktur zakupu:");
         model.addAttribute("url", "/user/purchase/invoice/listing");
+        model.addAttribute("person", getPersonNameAndSurname());
+
         return "/get_register";
     }
 
@@ -184,6 +200,7 @@ public class UserController {
         //UserOperation userOperation = new UserOperation();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
+        model.addAttribute("person", getPersonNameAndSurname());
 
         logger.info("Listing of purchase invoices for user: " + username + " for month: " + month + " and year: " + year);
 
@@ -202,6 +219,7 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
         logger.info("Deleting trade invoice number: " + invoiceNumber + " id: " + invoiceId + " by user " + username);
+        model.addAttribute("person", getPersonNameAndSurname());
 
         String result = userOperation.deleteTradeInvoiceFromDB(invoiceNumber, username, invoiceId);
         if(result.equals("SUCCESS")){
@@ -223,6 +241,7 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
         logger.info("Deleting purchase invoice number: " + invoiceNumber + " id: " + invoiceId + " by user " + username);
+        model.addAttribute("person", getPersonNameAndSurname());
 
         String result = userOperation.deletePurchaseInvoiceFromDB(invoiceNumber, username, invoiceId, tradePartnerNIP);
         if(result.equals("SUCCESS")){
@@ -239,6 +258,8 @@ public class UserController {
     public String getListingTradeRecordForm(Model model){
         model.addAttribute("registerName", " rejestru sprzedaży");
         model.addAttribute("url", "/user/trade/record/listing");
+        model.addAttribute("person", getPersonNameAndSurname());
+
         return "/get_register";
     }
 
@@ -251,6 +272,7 @@ public class UserController {
         //UserOperation userOperation = new UserOperation();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
+        model.addAttribute("person", getPersonNameAndSurname());
 
         logger.info("Listing of trade record for user: " + username + " for month: " + month + " and year: " + year);
 
@@ -265,6 +287,8 @@ public class UserController {
     public String getListingPurchaseRecordForm(Model model){
         model.addAttribute("registerName", " rejestru zakupu");
         model.addAttribute("url", "/user/purchase/record/listing");
+        model.addAttribute("person", getPersonNameAndSurname());
+
         return "/get_register";
     }
 
@@ -277,6 +301,7 @@ public class UserController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
+        model.addAttribute("person", getPersonNameAndSurname());
 
         logger.info("Listing of purchase record for user: " + username + " for month: " + month + " and year: " + year);
 
@@ -290,6 +315,8 @@ public class UserController {
     public String getGeneratingMonthlyReckoningForm(Model model){
         model.addAttribute("registerName", " rozliczenia miesiecznego do wygenerowania");
         model.addAttribute("url", "/user/reckoning/generating");
+        model.addAttribute("person", getPersonNameAndSurname());
+
         return "/get_register";
     }
 
@@ -300,6 +327,7 @@ public class UserController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
+        model.addAttribute("person", getPersonNameAndSurname());
 
         String reckoningName = month + "/" + year;
         logger.info("Generate monthly reckoning: " + reckoningName + " for user " + username);
@@ -350,6 +378,7 @@ public class UserController {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
+        model.addAttribute("person", getPersonNameAndSurname());
 
         logger.info("Generating final declaration for user: " + username + " month: " + month +  " year: " + year +
             " forClient: " + sumForClient + " in25: " + in25days + " in60: " + in60days + " in180: " + in180days);
@@ -387,6 +416,8 @@ public class UserController {
     public String getMonthlyReckoningForm(Model model){
         model.addAttribute("registerName", " rozliczenia miesiecznego do podglądu");
         model.addAttribute("url", "/user/reckoning/listing");
+        model.addAttribute("person", getPersonNameAndSurname());
+
         return "/get_register";
     }
 
@@ -396,6 +427,8 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
         String reckoningName = month + "/" + year;
+        model.addAttribute("person", getPersonNameAndSurname());
+
         logger.info("Get monthly reckoning: " + reckoningName + " for user " + username);
 
         model.addAttribute("month", month);
@@ -405,4 +438,10 @@ public class UserController {
         return "/list_monthly_reckoning";
     }
 
+    private String getPersonNameAndSurname(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); //get logged in username
+        Person person = personDao.findByUserName(username);
+        return person.getName() + " " + person.getSurname();
+    }
 }
