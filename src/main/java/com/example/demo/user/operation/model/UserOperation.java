@@ -12,6 +12,8 @@ import com.example.demo.reckoning.model.MonthlyReckoning;
 import com.example.demo.reckoning.model.PurchaseRecord;
 import com.example.demo.reckoning.model.TradeRecord;
 import com.example.demo.reckoning.service.ReckoningGenerator;
+import com.example.demo.service.DBOperations;
+import com.example.demo.users.dao.UserDao;
 import com.example.demo.users.dao.UserDaoImpl;
 import com.example.demo.users.model.User;
 
@@ -35,6 +37,8 @@ public class UserOperation {
     private RecordDaoImpl recordDao = new RecordDaoImpl();
     private InvoiceDaoImpl invoiceDao = new InvoiceDaoImpl();
     private ReckoningGenerator reckoningGenerator = new ReckoningGenerator();
+    private DeclarationValidator declarationValidator = new DeclarationValidator();
+    private MonthlyReckoningDaoImpl monthlyReckoningDao = new MonthlyReckoningDaoImpl();
 
     public String addTradeInvoiceToDB(String username, String invoiceNumber, String dateOfIssue, String tradePartnerNIP,
                                       String tradePartnerName, String dealingThingName, double net23, double net8,
@@ -62,18 +66,7 @@ public class UserOperation {
 
             if (tradeRecord ==  null){ //create monthly reckoning, trade and purchase records
                 logger.info("Create new monthlyReckoning, tradeRecord and purchaseRecord.");
-//                tradeRecord = new TradeRecord(recordName);
-//                PurchaseRecord newPurchaseRecord = new PurchaseRecord(recordName);
-//                UserDaoImpl userDao = new UserDaoImpl();
-//                User user = userDao.getUser(username);
-//                MonthlyReckoning newMonthlyReckoning = new MonthlyReckoning(recordName,0,0,
-//                        0, 0, 0, user, tradeRecord, newPurchaseRecord);
-//                MonthlyReckoningDaoImpl monthlyReckoningDao = new MonthlyReckoningDaoImpl();
-//
-//                if (!monthlyReckoningDao.addMonthlyReckoning(newMonthlyReckoning)){
-//                    logger.info("Error by create new monthlyReckoning!");
-//                    return "Przepraszamy błąd podczas połączenia z bazą danych i przypisywania faktury do rejestru";
-//                }
+
                 if(!reckoningGenerator.createRecords(username, recordName)){
                     logger.info("Error by create new monthlyReckoning!");
                     return "Przepraszamy błąd podczas połączenia z bazą danych i przypisywania faktury do rejestru";
@@ -158,18 +151,7 @@ public class UserOperation {
             PurchaseRecord purchaseRecord = recordDao.getPurchaseRecord(recordName, username);
             if (purchaseRecord == null){//create monthly reckoning, trade and purchase records
                 logger.info("Create new monthlyReckoning, tradeRecord and purchaseRecord.");
-//                TradeRecord tradeRecord = new TradeRecord(recordName);
-//                purchaseRecord = new PurchaseRecord(recordName);
-//                UserDaoImpl userDao = new UserDaoImpl();
-//                User user = userDao.getUser(username);
-//                MonthlyReckoning newMonthlyReckoning = new MonthlyReckoning(recordName,0,0,
-//                        0, 0, 0, user, tradeRecord, purchaseRecord);
-//                MonthlyReckoningDaoImpl monthlyReckoningDao = new MonthlyReckoningDaoImpl();
-//
-//                if (!monthlyReckoningDao.addMonthlyReckoning(newMonthlyReckoning)){
-//                    logger.info("Error by create new monthlyReckoning!");
-//                    return "Przepraszamy błąd podczas połączenia z bazą danych i przypisywania faktury do rejestru";
-//                }
+
                 if(!reckoningGenerator.createRecords(username, recordName)){
                     logger.info("Error by create new monthlyReckoning!");
                     return "Przepraszamy błąd podczas połączenia z bazą danych i przypisywania faktury do rejestru";
@@ -287,23 +269,46 @@ public class UserOperation {
 
 
     public String validateDeclarationData(Integer overhang, String sumForClient, String in25days, String in60days, String in180days) {
+        return declarationValidator.validateDeclarationData(overhang, sumForClient, in25days, in60days, in180days);
+    }
 
-        if(overhang == 0){
-            logger.info("Refund for client is impossible. Overhang = 0.");
-            return "Nadwyżka podaktu należnego nad naliczonym. Brak możliwości otrzymania zwrotu podatku.";
+    public boolean isOldReckoning(String reckoningName){
+        return declarationValidator.isOldReckoning(reckoningName);
+    }
+
+    public boolean isReckoningFromTheFuture(String reckoningName){
+        return declarationValidator.isReckoningFromTheFuture(reckoningName);
+    }
+
+    public Map<String, Integer> updateMonthlyReckoning(Map<String, Integer> preDeclaration, String sumForClient,
+                                                       String in25days, String in60days, String in180days,
+                                                       String reckoningName, String username) {
+
+        preDeclaration.put("sumRefund", Integer.valueOf(sumForClient));
+        preDeclaration.put("refund25Days", Integer.valueOf(in25days));
+        preDeclaration.put("refund60Days", Integer.valueOf(in60days));
+        preDeclaration.put("refund180Days", Integer.valueOf(in180days));
+        Integer forNextMonth = preDeclaration.get("overhang") - preDeclaration.get("sumRefund");
+        preDeclaration.put("forNextMonth", forNextMonth);
+
+
+        MonthlyReckoning monthlyReckoning = monthlyReckoningDao.getMonthlyReckoning(username, reckoningName);
+        monthlyReckoning.setForNextMonth(forNextMonth);
+        monthlyReckoning.setForRevenue(0);
+        monthlyReckoning.setRefund25Days(Integer.valueOf(in25days));
+        monthlyReckoning.setRefund60Days(Integer.valueOf(in60days));
+        monthlyReckoning.setRefund180Days(Integer.valueOf(in180days));
+
+        DBOperations dbOperations = new DBOperations();
+        if(!dbOperations.updateInDB(monthlyReckoning)){
+            logger.info("Error by updating final monthly reckoning");
+            return null;
         }
 
-        if(Integer.valueOf(sumForClient) > overhang){
-            logger.info("Sum for client invalid > overhang");
-            return "Suma do zwrotu na rachunek bankowy nie może przekraczać nadwyżki podatku = " + overhang;
-        }
+        return preDeclaration;
+    }
 
-        Integer sumOfRefund = Integer.valueOf(in25days) + Integer.valueOf(in60days) + Integer.valueOf(in180days);
-        if(!sumOfRefund.equals(Integer.valueOf(sumForClient))){
-            logger.info("Sum of refund (in 25, 60 and 180 days) must be equals to sumForClient");
-            return "Suma zwrotów w terminach: 25, 60, 180 dni, podana jako: "  + sumOfRefund +
-                    " musi być zgodna  z całkowitą sumą zwrotu = " + sumForClient;
-        }
-        return "VALID";
+    public MonthlyReckoning getMonthlyReckoning(String username, String reckoningName){
+        return monthlyReckoningDao.getMonthlyReckoning(username, reckoningName);
     }
 }

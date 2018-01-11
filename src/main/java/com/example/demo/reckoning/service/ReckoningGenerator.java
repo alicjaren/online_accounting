@@ -203,8 +203,12 @@ public class ReckoningGenerator {
         //input tax
         String previousReckoningName = monthlyReckoningDao.getPreviousReckoningName(reckoningName);
         MonthlyReckoning previousMonthlyReckoning = monthlyReckoningDao.getMonthlyReckoning(username, previousReckoningName);
-        preMonthlyReckoningMap.put("fromPreviousMonth", previousMonthlyReckoning.getForNextMonth());
-
+        if(previousMonthlyReckoning == null){
+            preMonthlyReckoningMap.put("fromPreviousMonth", 0);
+        }
+        else {
+            preMonthlyReckoningMap.put("fromPreviousMonth", previousMonthlyReckoning.getForNextMonth());
+        }
         preMonthlyReckoningMap.put("sumFixedAssetsNet", (int) Math.round(purchaseRecord.getSumFixedAssetsNet()));
         preMonthlyReckoningMap.put("sumFixedAssetsVat", (int) Math.round(purchaseRecord.getSumFixedAssetsVat()));
 

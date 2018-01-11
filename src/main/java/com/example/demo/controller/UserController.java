@@ -274,7 +274,7 @@ public class UserController {
         model.addAttribute("month", month);
         model.addAttribute("year", year);
         String purchaseRecordName = month + "/" + year;
-        //UserOperation userOperation = new UserOperation();
+
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
 
@@ -301,15 +301,17 @@ public class UserController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName(); //get logged in username
 
-        //UserOperation userOperation = new UserOperation();
         String reckoningName = month + "/" + year;
         logger.info("Generate monthly reckoning: " + reckoningName + " for user " + username);
 
-        boolean isOldReckoning = false;
-        //todo sprawdzić, czy nie jest to stare rozliczenie, które już istnieje, wtedy pytanie o potwierdzenie
-        if(isOldReckoning){
+
+        if(userOperation.isOldReckoning(reckoningName)){
             model.addAttribute("error", "Taka deklaracja powinna już zostać złożona w Urzędzie Skarobowym." +
                     " Czy chcesz ją wygenerować ponownie?");
+        }
+
+        if(userOperation.isReckoningFromTheFuture(reckoningName)){
+            model.addAttribute("error", "Wybrane rozliczenie dotyczy przyszłości, nie ma w nim żadnych faktur.");
         }
 
         Map<String, Integer> preDeclaration = userOperation.generateMonthlyReckoning(username, reckoningName);
@@ -366,10 +368,41 @@ public class UserController {
             return  "/get_final_declaration";
         }
 
-        //todo 2. wygenerować końcową deklarację i wyświetlić
+        Map<String, Integer> finalDeclaration = userOperation.updateMonthlyReckoning(preDeclaration, sumForClient,
+                in25days, in60days, in180days, reckoningName, username);
+
+        if (finalDeclaration == null){
+            logger.info("Error by updating MonthlyReckoning");
+            model.addAttribute("map", preDeclaration);
+            model.addAttribute("error", "Przepraszamy, wystąpiły błędy techniczne. Prosimy spróbować ponownie.");
+            return  "/get_final_declaration";
+        }
+
+        model.addAttribute("map", finalDeclaration);
+
         return "/declaration";
     }
 
-    //@RequestMapping("/user/declaration") - podgląd deklaracji ???
+    @RequestMapping("/user/reckoning/listing")
+    public String getMonthlyReckoningForm(Model model){
+        model.addAttribute("registerName", " rozliczenia miesiecznego do podglądu");
+        model.addAttribute("url", "/user/reckoning/listing");
+        return "/get_register";
+    }
+
+    @RequestMapping(value = "/user/reckoning/listing", method = RequestMethod.POST)
+    public String getMonthlyReckoning(@RequestParam("month") String month,
+                                      @RequestParam("year") String year,  Model model){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName(); //get logged in username
+        String reckoningName = month + "/" + year;
+        logger.info("Get monthly reckoning: " + reckoningName + " for user " + username);
+
+        model.addAttribute("month", month);
+        model.addAttribute("year", year);
+
+        model.addAttribute("reckoning", userOperation.getMonthlyReckoning(username, reckoningName));
+        return "/list_monthly_reckoning";
+    }
 
 }

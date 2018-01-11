@@ -1,10 +1,135 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Deklaracja końcowa</title>
+    <div th:replace="fragments/header :: header-css"/>
+    <title>Rozliczenie misięczne</title>
 </head>
 <body>
-    <h1>Deklaracja końcowa dla Urzędu Skarbowego</h1>
+
+<div th:replace="fragments/header :: header"/>
+
+<div class="container">
+
+    <div class="starter-template">
+
+        <h1>Końcowe rozliczenie miesięczne</h1>
+        <div th:if="${month} != null and ${year} != null">
+            <div class="alert alert-info">
+                Miesiąc:
+                <span th:text="${month}"></span>
+                Rok:
+                <span th:text="${year}"></span>
+            </div>
+        </div>
+
+        <div th:if="${error} != null">
+            <div class="alert alert-info">
+                <span th:text="${error}"></span>
+            </div>
+        </div>
+
+
+        <div th:if="${map} != null">
+            <table class="declaration-table">
+                <caption>Rozliczenie podatku należnego</caption>
+                <tr>
+                    <th>Stawka opodatkowania</th>
+                    <th>Podstawa opodatkowania</th>
+                    <th>Podatek należny</th>
+                </tr>
+                <tr>
+                    <td>5%</td>
+                    <td th:text="${map.get('sumTradeNet5')}"></td>
+                    <td th:text="${map.get('sumTradeVat5')}"></td>
+                </tr>
+                <tr>
+                    <td>8%</td>
+                    <td th:text="${map.get('sumTradeNet8')}"></td>
+                    <td th:text="${map.get('sumTradeVat8')}"></td>
+                </tr>
+                <tr>
+                    <td>23%</td>
+                    <td th:text="${map.get('sumTradeNet23')}"></td>
+                    <td th:text="${map.get('sumTradeVat23')}"></td>
+                </tr>
+                <tr>
+                    <td>Suma</td>
+                    <td th:text="${map.get('sumTradeNet')}"></td>
+                    <td th:text="${map.get('sumTradeVat')}"></td>
+                </tr>
+            </table>
+
+            <table class="declaration-table">
+                <caption>Rozliczenie podatku naliczonego</caption>
+                <tr>
+                    <th>Rodzaj</th>
+                    <th>Wartość netto</th>
+                    <th>Podatek naliczony</th>
+                </tr>
+                <tr>
+                    <td>Nadwyżka z poprzedniej deklaracji</td>
+                    <td> - </td>
+                    <td th:text="${map.get('fromPreviousMonth')}"></td>
+                </tr>
+                <tr>
+                    <td>Nabycie środków trwałych</td>
+                    <td th:text="${map.get('sumFixedAssetsNet')}"></td>
+                    <td th:text="${map.get('sumFixedAssetsVat')}"></td>
+                </tr>
+                <tr>
+                    <td>Nabycie towarów pozostałych</td>
+                    <td th:text="${map.get('sumPurchaseOthersNet')}"></td>
+                    <td th:text="${map.get('sumPurchaseOthersVat')}"></td>
+                </tr>
+            </table>
+
+
+            <table class="declaration-table">
+                <caption>Rozliczenie końcowe</caption>
+                <tr>
+                    <th>Rodzaj</th>
+                    <th>Podatek naliczony</th>
+                </tr>
+                <tr>
+                    <td>Razem kwota podatku naliczonego do odliczenia</td>
+                    <td th:text="${map.get('sumPurchaseVat')}"></td>
+                </tr>
+                <tr>
+                    <td>Kwota podlegająca wpłacie do Urzędu Skarobowego</td>
+                    <td th:text="${map.get('forRevenue')}"></td>
+                </tr>
+                <tr>
+                    <td>Nadwyżka podatku naliczonego nad należnym</td>
+                    <td th:text="${map.get('overhang')}"></td>
+                </tr>
+                <tr>
+                    <td>Kwota do zwrotu na rachunek bankowy wskazany przez podatnika</td>
+                    <td th:text="${map.get('sumRefund')}"></td>
+                </tr>
+                <tr>
+                    <td>Kwota do zwrotu w terminie 25 dni</td>
+                    <td th:text="${map.get('refund25Days')}"></td>
+                </tr>
+                <tr>
+                    <td>Kwota do zwrotu w terminie 60 dni</td>
+                    <td th:text="${map.get('refund60Days')}"></td>
+                </tr>
+                <tr>
+                    <td>Kwota do zwrotu w terminie 180 dni</td>
+                    <td th:text="${map.get('refund180Days')}"></td>
+                </tr>
+                <tr>
+                    <td>Kwota do przeniesienia na kolejny okres rozliczeniowy</td>
+                    <td th:text="${map.get('forNextMonth')}"></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+</div>
+<!-- /.container -->
+<div th:replace="fragments/footer :: footer"/>
+
 </body>
 </html>
