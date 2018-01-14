@@ -10,7 +10,8 @@
 
 <div class="container">
 
-    <div class="starter-template">
+    <div class="row" style="margin-top:20px">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
         <h1>Rozliczenie miesięczne</h1>
 
         <div th:if="${month} != null and ${year} != null">
@@ -31,46 +32,59 @@
 
 
         <div th:if="${reckoning} != null">
-            <table class="record-table">
+            <table class="table table-bordered">
+                <thead>
                 <tr>
-                    <th>Rodzaj kwoty</th>
-                    <th>Wartość</th>
+                    <th scope="col">Rodzaj kwoty</th>
+                    <th scope="col">Wartość</th>
                 </tr>
+                </thead>
+
+                <tbody>
                 <tr>
-                    <td>Kwota podlegająca wpłacie do urzędu skarbowego</td>
+                    <th scope="row">Kwota podlegająca wpłacie do urzędu skarbowego</th>
                     <td th:text="${reckoning.forRevenue}"></td>
                 </tr>
                 <tr>
-                    <td>Kwota zwrotu dla podatnika w terminie 25 dni</td>
+                    <th scope="row">Kwota zwrotu dla podatnika w terminie 25 dni</th>
                     <td th:text="${reckoning.refund25Days}"></td>
                 </tr>
                 <tr>
-                    <td>Kwota zwrotu dla podatnika w terminie 60 dni</td>
+                    <th scope="row">Kwota zwrotu dla podatnika w terminie 60 dni</th>
                     <td th:text="${reckoning.refund60Days}"></td>
                 </tr>
                 <tr>
-                    <td>Kwota zwrotu dla podatnika w terminie 180 dni</td>
+                    <th scope="row">Kwota zwrotu dla podatnika w terminie 180 dni</th>
                     <td th:text="${reckoning.refund180Days}"></td>
                 </tr>
                 <tr>
-                    <td>Kwota do przeniesienia na następny okres rozliczeniowy</td>
+                    <th scope="row">Kwota do przeniesienia na następny okres rozliczeniowy</th>
                     <td th:text="${reckoning.forNextMonth}"></td>
                 </tr>
+                </tbody>
             </table>
         </div>
 
-        <div th:if="${reckoning == null}">
-            <span>Takie rozliczenie nie zostało jeszcze wygenerowane.</span>
+        <div th:if="${reckoning == null}"  class="alert alert-warning" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">
+                    Takie rozliczenie nie zostało jeszcze wygenerowane.</span>
         </div>
 
         <div id="formToGenReckoning">
             <form th:action="@{/user/reckoning/generating}" method="post">
-                <input type="hidden" name="month" th:attr="value = ${month}" />
-                <input type="hidden" name="year" th:attr="value = ${year}" />
-                <input type="submit" class="button" value="Generuj rozliczenie ponownie"/>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <input type="hidden" name="month" th:attr="value = ${month}" />
+                        <input type="hidden" name="year" th:attr="value = ${year}" />
+                        <input type="submit" class="btn btn-lg btn-primary btn-block" value="Generuj rozliczenie ponownie"/>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                    </div>
+                </div>
             </form>
         </div>
 
+    </div>
     </div>
 
 </div>

@@ -16,96 +16,107 @@
 
 <div class="container">
 
-    <div class="starter-template">
-        <h1>Nowa faktura sprzedaży</h1>
+    <div class="row" style="margin-top:20px">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <form th:action="@{/user/trade/invoice/adding}" method="post">
+                <fieldset>
+                    <h1>Nowa faktura sprzedaży</h1>
 
-        <div th:if="${error} != null">
-            <div class="alert alert-danger" role="alert">
-                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                <span th:text="${error}"></span>
-            </div>
+                    <div th:if="${error} != null">
+                        <div class="alert alert-danger" role="alert">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span th:text="${error}"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="invoiceNumber" class="invoiceEl" data-icon="p"> Numer faktury </label>
+                        <input id="invoiceNumber" name="invoiceNumber" class="form-control input-lg" required="required" type="text" placeholder="numer faktury" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateOfIssue" class="date" data-icon="p"> Data wystawienia </label>
+                        <input id="dateOfIssue" name="dateOfIssue" class="form-control input-lg" required="required" type="date" placeholder="data wystawienia" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tradePartnerNIP" class="invoiceEl" data-icon="p"> NIP kontrahenta </label>
+                        <input id="tradePartnerNIP" name="tradePartnerNIP"  class="form-control input-lg" required="required" type="text" placeholder="NIP" maxlength="10" size="10" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tradePartnerName" class="invoiceEl" data-icon="p"> Nazwa kontrahenta </label>
+                        <input id="tradePartnerName" name="tradePartnerName" class="form-control input-lg"  required="required" type="text" placeholder="Kontrahent" size="100"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dealingThingName" class="invoiceEl" data-icon="p"> Przedmioty sprzedaży </label>
+                        <input id="dealingThingName" name="dealingThingName" class="form-control input-lg" required="required" type="text" placeholder="Przedmioty zakupu" size="100"/>
+                    </div>
+
+                    <div class="form-group">
+                        <table class="table table-bordered">
+                            <caption>Kwoty sprzedaży</caption>
+                            <thead>
+                            <tr>
+                                <th scope="col">Stawka VAT</th>
+                                <th scope="col">Wartość netto</th>
+                                <th scope="col">Wartość VAT</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr>
+                                <th scope="row">5%</th>
+                                <td>
+                                    <input id="net5" name="net5" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
+                                </td>
+                                <td>
+                                    <input id="vat5" name="vat5" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
+                                </td>
+                            </tr>
+                            <tr>
+
+                                <th scope="row">8%</th>
+                                <td>
+                                    <input id="net8" name="net8" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
+                                </td>
+                                <td>
+                                    <input id="vat8" name="vat8" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">23%</th>
+                                <td>
+                                    <input id="net23" name="net23" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
+                                </td>
+                                <td>
+                                    <input id="vat23" name="vat23" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gross" class="invoiceEl" data-icon="p"> Wartość brutto </label>
+                        <input id="gross" name="gross" class="form-control input-lg" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Zapisz"/>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
         </div>
-
-        <form th:action="@{/user/trade/invoice/adding}" method="post">
-            <ul>
-                <li>
-                    <label for="invoiceNumber" class="invoiceEl" data-icon="p"> Numer faktury </label>
-                    <input id="invoiceNumber" name="invoiceNumber" required="required" type="text" placeholder="numer faktury" />
-                </li>
-
-                <li>
-                    <label for="dateOfIssue" class="date" data-icon="p"> Data wystawienia </label>
-                    <input id="dateOfIssue" name="dateOfIssue" required="required" type="date" placeholder="data wystawienia" />
-                </li>
-
-                <li>
-                    <label for="tradePartnerNIP" class="invoiceEl" data-icon="p"> NIP kontrahenta </label>
-                    <input id="tradePartnerNIP" name="tradePartnerNIP" required="required" type="text" placeholder="NIP" maxlength="10" size="10" />
-                </li>
-
-                <li>
-                    <label for="tradePartnerName" class="invoiceEl" data-icon="p"> Nazwa kontrahenta </label>
-                    <input id="tradePartnerName" name="tradePartnerName" required="required" type="text" placeholder="Kontrahent" size="100"/>
-                </li>
-
-                <li>
-                    <label for="dealingThingName" class="invoiceEl" data-icon="p"> Przedmioty sprzedaży </label>
-                    <input id="dealingThingName" name="dealingThingName" required="required" type="text" placeholder="Przedmioty zakupu" size="100"/>
-                </li>
-
-                <li>
-
-                    <table>
-                        <caption>Kwoty sprzedaży</caption>
-                        <tr>
-                            <th>Stawka VAT</th>
-                            <th>Wartość netto</th>
-                            <th>Wartość VAT</th>
-                        </tr>
-
-                        <tr>
-                            <td>5%</td>
-                            <td>
-                                <input id="net5" name="net5" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
-                            </td>
-                            <td>
-                                <input id="vat5" name="vat5" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
-                            </td>
-                        </tr>
-                        <tr>
-
-                            <td>8%</td>
-                            <td>
-                                <input id="net8" name="net8" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
-                            </td>
-                            <td>
-                                <input id="vat8" name="vat8" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>23%</td>
-                            <td>
-                                <input id="net23" name="net23" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
-                            </td>
-                            <td>
-                                <input id="vat23" name="vat23" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
-                            </td>
-                        </tr>
-
-                    </table>
-                </li>
-
-                <li>
-                    <label for="gross" class="invoiceEl" data-icon="p"> Wartość brutto </label>
-                    <input id="gross" name="gross" required="required" type="number" step = "0.01" placeholder="0,00" size="12"/>
-                </li>
-
-                <li>
-                    <input type="submit" class="button" value="Zapisz"/>
-                </li>
-            </ul>
-        </form>
-
     </div>
 
 </div>

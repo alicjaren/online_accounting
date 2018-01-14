@@ -36,17 +36,21 @@
         </div>
 
         <div th:if="${record} != null">
-            <table class="record-table">
+            <table class="table table-bordered">
                 <caption>Zakupy niezaliczane do środków trwałych</caption>
+                <thead>
                 <tr>
-                    <th>Suma netto 23%</th>
-                    <th>Suma VAT 23%</th>
-                    <th>Suma netto 8%</th>
-                    <th>Suma VAT 8%</th>
-                    <th>Suma netto 5%</th>
-                    <th>Suma VAT 5%</th>
-                    <th>Suma brutto</th>
+                    <th scope="col">Suma netto 23%</th>
+                    <th scope="col">Suma VAT 23%</th>
+                    <th scope="col">Suma netto 8%</th>
+                    <th scope="col">Suma VAT 8%</th>
+                    <th scope="col">Suma netto 5%</th>
+                    <th scope="col">Suma VAT 5%</th>
+                    <th scope="col">Suma brutto</th>
                 </tr>
+                </thead>
+
+                <tbody>
                 <tr>
                     <td th:text="${record.sumNet23}"></td>
                     <td th:text="${record.sumVat23}"></td>
@@ -56,32 +60,47 @@
                     <td th:text="${record.sumVat5}"></td>
                     <td th:text="${record.sumGross}"></td>
                 </tr>
+                </tbody>
             </table>
 
-            <table class="record-table">
+            <table class="table table-bordered">
                 <caption>Zakupy zaliczane do środków trwałych</caption>
+                <thead>
                 <tr>
-                    <th>Suma netto</th>
-                    <th>Suma VAT</th>
-                    <th>Suma brutto</th>
+                    <th scope="col">Suma netto</th>
+                    <th scope="col">Suma VAT</th>
+                    <th scope="col">Suma brutto</th>
                 </tr>
+                </thead>
+
+                <tbody>
                 <tr>
                     <td th:text="${record.sumFixedAssetsNet}"></td>
                     <td th:text="${record.sumFixedAssetsVat}"></td>
                     <td th:text="${record.sumFixedAssetsGross}"></td>
                 </tr>
+                </tbody>
             </table>
         </div>
 
-        <div th:if="${record == null}">
-            <span>Brak wygenerowanego rejestru zakupu</span>
+
+        <div th:if="${record == null}" class="alert alert-info" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true">
+                   Brak wygenerowanego rejestru zakupu
+                </span>
         </div>
 
         <div id="formToGenReckoning">
             <form th:action="@{/user/reckoning/generating}" method="post">
-                <input type="hidden" name="month" th:attr="value = ${month}" />
-                <input type="hidden" name="year" th:attr="value = ${year}" />
-                <input type="submit" class="button" value="Generuj rozliczenie"/>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <input type="hidden" name="month" th:attr="value = ${month}" />
+                        <input type="hidden" name="year" th:attr="value = ${year}" />
+                        <input type="submit" class="btn btn-lg btn-primary btn-block" value="Generuj rozliczenie"/>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                    </div>
+                </div>
             </form>
         </div>
 

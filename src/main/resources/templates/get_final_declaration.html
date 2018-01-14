@@ -10,138 +10,162 @@
 
 <div class="container">
 
-    <div class="starter-template">
+    <div class="row" style="margin-top:20px">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
 
-        <div th:if="${month} != null and ${year} != null">
-            <div class="alert alert-info">
-                Miesiąc:
-                <span th:text="${month}"></span>
-                Rok:
-                <span th:text="${year}"></span>
+            <div th:if="${month} != null and ${year} != null">
+                <div class="alert alert-info">
+                    Miesiąc:
+                    <span th:text="${month}"></span>
+                    Rok:
+                    <span th:text="${year}"></span>
+                </div>
             </div>
-        </div>
 
-        <div th:if="${error} != null">
-            <div class="alert alert-danger" role="alert">
-                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                <span th:text="${error}"></span>
+            <div th:if="${error} != null">
+                <div class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                    <span th:text="${error}"></span>
+                </div>
             </div>
-        </div>
 
-        <div th:if="${map} != null">
-            <table class="declaration-table">
-                <caption>Rozliczenie podatku należnego</caption>
-                <tr>
-                    <th>Stawka opodatkowania</th>
-                    <th>Podstawa opodatkowania</th>
-                    <th>Podatek należny</th>
-                </tr>
-                <tr>
-                    <td>5%</td>
-                    <td th:text="${map.get('sumTradeNet5')}"></td>
-                    <td th:text="${map.get('sumTradeVat5')}"></td>
-                </tr>
-                <tr>
-                    <td>8%</td>
-                    <td th:text="${map.get('sumTradeNet8')}"></td>
-                    <td th:text="${map.get('sumTradeVat8')}"></td>
-                </tr>
-                <tr>
-                    <td>23%</td>
-                    <td th:text="${map.get('sumTradeNet23')}"></td>
-                    <td th:text="${map.get('sumTradeVat23')}"></td>
-                </tr>
-                <tr>
-                    <td>Suma</td>
-                    <td th:text="${map.get('sumTradeNet')}"></td>
-                    <td th:text="${map.get('sumTradeVat')}"></td>
-                </tr>
-            </table>
+            <div th:if="${map} != null">
+                <table class="table table-bordered">
+                    <caption>Rozliczenie podatku należnego</caption>
 
-            <table class="declaration-table">
-                <caption>Rozliczenie podatku naliczonego</caption>
+                    <thead>
+                    <tr>
+                        <th scope="col">Stawka opodatkowania</th>
+                        <th scope="col">Podstawa opodatkowania</th>
+                        <th scope="col">Podatek należny</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <th scope="row">5%</th>
+                        <td th:text="${map.get('sumTradeNet5')}"></td>
+                        <td th:text="${map.get('sumTradeVat5')}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">8%</th>
+                        <td th:text="${map.get('sumTradeNet8')}"></td>
+                        <td th:text="${map.get('sumTradeVat8')}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">23%</th>
+                        <td th:text="${map.get('sumTradeNet23')}"></td>
+                        <td th:text="${map.get('sumTradeVat23')}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Suma</th>
+                        <td th:text="${map.get('sumTradeNet')}"></td>
+                        <td th:text="${map.get('sumTradeVat')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+                <table class="table table-bordered">
+                    <caption>Rozliczenie podatku naliczonego</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Rodzaj</th>
+                            <th scope="col">Wartość netto</th>
+                            <th scope="col">Podatek naliczony</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <th scope="row">Nadwyżka z poprzedniej deklaracji</th>
+                        <td> - </td>
+                        <td th:text="${map.get('fromPreviousMonth')}"></td>
+                    </tr>
+
                 <tr>
-                    <th>Rodzaj</th>
-                    <th>Wartość netto</th>
-                    <th>Podatek naliczony</th>
-                </tr>
-                <tr>
-                    <td>Nadwyżka z poprzedniej deklaracji</td>
-                    <td> - </td>
-                    <td th:text="${map.get('fromPreviousMonth')}"></td>
-                </tr>
-                <tr>
-                    <td>Nabycie środków trwałych</td>
+                    <th scope="row">Nabycie środków trwałych</th>
                     <td th:text="${map.get('sumFixedAssetsNet')}"></td>
                     <td th:text="${map.get('sumFixedAssetsVat')}"></td>
                 </tr>
+
                 <tr>
-                    <td>Nabycie towarów pozostałych</td>
+                    <th scope="row">Nabycie towarów pozostałych</th>
                     <td th:text="${map.get('sumPurchaseOthersNet')}"></td>
                     <td th:text="${map.get('sumPurchaseOthersVat')}"></td>
                 </tr>
-            </table>
+                    </tbody>
+                </table>
 
 
-            <table class="declaration-table">
-                <caption>Rozliczenie końcowe</caption>
-                <tr>
-                    <th>Rodzaj</th>
-                    <th>Podatek naliczony</th>
-                </tr>
-                <tr>
-                    <td>Razem kwota podatku naliczonego do odliczenia</td>
-                    <td th:text="${map.get('sumPurchaseVat')}"></td>
-                </tr>
-                <tr>
-                    <td>Kwota podlegająca wpłacie do Urzędu Skarobowego</td>
-                    <td th:text="${map.get('forRevenue')}"></td>
+                <table class="table table-bordered">
+                    <caption>Rozliczenie końcowe</caption>
+                    <thead>
+                    <tr>
+                        <th scope="col">Rodzaj</th>
+                        <th scope="col">Podatek naliczony</th>
+                    </tr>
+                    </thead>
 
-                </tr>
-                <tr>
-                    <td>Nadwyżka podatku naliczonego nad należnym</td>
-                    <td th:text="${map.get('overhang')}"></td>
-                </tr>
-            </table>
+                    <tbody>
+                    <tr>
+                        <th scope="row">Razem kwota podatku naliczonego do odliczenia</th>
+                        <td th:text="${map.get('sumPurchaseVat')}"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Kwota podlegająca wpłacie do Urzędu Skarobowego</th>
+                        <td th:text="${map.get('forRevenue')}"></td>
+
+                    </tr>
+                    <tr>
+                        <th scope="row">Nadwyżka podatku naliczonego nad należnym</th>
+                        <td th:text="${map.get('overhang')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div>
+                <form th:action="@{/user/declaration}" method="post">
+                    <fieldset>
+
+                        <input type="hidden" name="month" th:attr="value = ${month}" />
+                        <input type="hidden" name="year" th:attr="value = ${year}" />
+
+                        <div class="form-group">
+                            <label for="sumForClient" class="invoiceEl" data-icon="p"> Kwota do zwrotu na rachunek </label>
+                            <input id="sumForClient" name="sumForClient" class="form-control input-lg" required="required" type="number" placeholder="0" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="in25days" class="invoiceEl" data-icon="p"> Kwota do zwrotu w terminie 25 dni </label>
+                            <input id="in25days" name="in25days" class="form-control input-lg" required="required" type="number" placeholder="0" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="in60days" class="invoiceEl" data-icon="p"> Kwota do zwrotu w terminie 60 dni </label>
+                            <input id="in60days" name="in60days" class="form-control input-lg" required="required" type="number" placeholder="0" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="in180days" class="invoiceEl" data-icon="p"> Kwota do zwrotu w terminie 180 dni </label>
+                            <input id="in180days" name="in180days"  class="form-control input-lg" required="required" type="number" placeholder="0" />
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <input type="submit" class="btn btn-lg btn-primary btn-block" value="Generuj ostateczną deklarację"/>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </form>
+            </div>
+
         </div>
-
-
-        <div id="formToGenFinalDeclaration">
-            <form th:action="@{/user/declaration}" method="post">
-                <input type="hidden" name="month" th:attr="value = ${month}" />
-                <input type="hidden" name="year" th:attr="value = ${year}" />
-
-                <ul>
-                    <li>
-                        <label for="sumForClient" class="invoiceEl" data-icon="p"> Kwota do zwrotu na rachunek </label>
-                        <input id="sumForClient" name="sumForClient" required="required" type="number" placeholder="0" />
-                    </li>
-
-                    <li>
-                        <label for="in25days" class="invoiceEl" data-icon="p"> Kwota do zwrotu w terminie 25 dni </label>
-                        <input id="in25days" name="in25days" required="required" type="number" placeholder="0" />
-                    </li>
-
-                    <li>
-                        <label for="in60days" class="invoiceEl" data-icon="p"> Kwota do zwrotu w terminie 60 dni </label>
-                        <input id="in60days" name="in60days" required="required" type="number" placeholder="0" />
-                    </li>
-
-                    <li>
-                        <label for="in180days" class="invoiceEl" data-icon="p"> Kwota do zwrotu w terminie 180 dni </label>
-                        <input id="in180days" name="in180days" required="required" type="number" placeholder="0" />
-                    </li>
-
-                    <li>
-                        <input type="submit" class="button" value="Generuj ostateczną deklarację"/>
-                    </li>
-                </ul>
-
-            </form>
-        </div>
-
     </div>
-
 </div>
 <!-- /.container -->
 <div th:replace="fragments/footer :: footer"/>
