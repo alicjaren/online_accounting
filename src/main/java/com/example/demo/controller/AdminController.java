@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.admin.operation.model.AdminOperation;
+import com.example.demo.persons.dao.PersonDaoImpl;
 import com.example.demo.persons.model.Person;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +19,7 @@ public class AdminController {
 
     private static Logger LOGGER = Logger.getLogger("InfoLogging");
     private AdminOperation adminOperation = new AdminOperation();
+    private PersonDaoImpl personDao = new PersonDaoImpl();
 
     @RequestMapping("/admin/users/list")
     public String usersList(Model model) {
@@ -27,6 +29,9 @@ public class AdminController {
         List<Person> persons = adminOperation.getPersonsList();
         model.addAttribute("persons", persons);
         LOGGER.info(persons.toString());
+        String username = auth.getName(); //get logged in username
+        Person person = personDao.findByUserName(username);
+        model.addAttribute("person", person.getName() + " " + person.getSurname());
         return "/admin_user_list";
     }
 
@@ -36,6 +41,9 @@ public class AdminController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String role = auth.getAuthorities().toString();
         LOGGER.info("rola usera: " + role);
+        String username = auth.getName(); //get logged in username
+        Person person = personDao.findByUserName(username);
+        model.addAttribute("person", person.getName() + " " + person.getSurname());
         return "/admin_add_user";
     }
 
@@ -67,16 +75,19 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value="/admin/user",  method = RequestMethod.DELETE)
+    @RequestMapping(value="/admin/user/deleting",  method = RequestMethod.POST)
     public String deleteUser(@RequestParam("username") String username, Model model){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String role = auth.getAuthorities().toString();
         LOGGER.info("rola usera: " + role);
+        String adminName = auth.getName(); //get logged in username
+        Person person = personDao.findByUserName(adminName);
+        model.addAttribute("person", person.getName() + " " + person.getSurname());
         if (adminOperation.deleteUser(username)){
-            model.addAttribute("deletedSuccess", "Użytkownik usunięty pomyślnie.");
+            model.addAttribute("result", "Użytkownik usunięty pomyślnie.");
         }
         else{
-            model.addAttribute("deletedError", "Nie można usunąć użytkownika. " +
+            model.addAttribute("error", "Nie można usunąć użytkownika. " +
                     "Proszę najpierw usunąć jego zależności (rozliczenia i faktury)");
         }
         return "/admin_user_list";
@@ -85,6 +96,10 @@ public class AdminController {
     @RequestMapping("/admin/password/changing")
     public String getChangingPasswordForm(Model model){
         model.addAttribute("admin", "true");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String adminName = auth.getName(); //get logged in username
+        Person person = personDao.findByUserName(adminName);
+        model.addAttribute("person", person.getName() + " " + person.getSurname());
         return "/change_password";
     }
 

@@ -18,10 +18,15 @@
                     <h1>Logowanie</h1>
 
                     <div th:if="${param.error}">
-                        <div class="alert alert-danger">
-                            Błędna nazwa użytkownika lub hasło.
+                        <div class="alert alert-danger" role="alert">
+                            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                            <span class="sr-only">Error:</span>
+                            Błędna nazwa użytkownika lub hasło
                         </div>
                     </div>
+
+
+
                     <div th:if="${param.logout}">
                         <div class="alert alert-info">
                             Wylogowano pomyślnie.

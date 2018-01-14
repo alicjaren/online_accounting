@@ -8,13 +8,14 @@
 </head>
 <body>
 
+<div th:replace="fragments/header_basic :: header"/>
 
 <div class="container">
 
     <div class="starter-template">
         <h1>Księgowość online</h1>
-        <h2>1. Strona dla <a th:href="@{/admin}">administratora</a></h2>
-        <h2>2. Strona dla <a th:href="@{/user}">użytkownika</a></h2>
+        <a th:href="@{/admin}" class="btn btn-primary btn-lg btn-block" role="button">Strona dla administratora</a>
+        <a th:href="@{/user}" class="btn btn-primary btn-lg btn-block" role="button">Strona dla użytkownika</a>
     </div>
 
 </div>

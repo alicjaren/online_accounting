@@ -2,26 +2,24 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
+    <link th:href="@{/static.js/css/bootstrap.min.css}" rel="stylesheet" media="screen"> </link>
+
 </head>
 <body>
 <div th:fragment="footer">
 
     <div class="container">
 
-        <footer>
+        <footer class="footer">
             <!-- this is footer -->
             <div th:if="${person} != null">
                 <div class="alert alert-info">
-                    Zalogowany użytkownik: <span th:text="${person}"></span>
+                    Zalogowany użytkownik: <span class="text-muted" th:text="${person}"></span>
                 </div>
             </div>
-            <!--<span sec:authorize="isAuthenticated()">-->
-                <!--| Zalogowany użytkowik: <span sec:authentication="name"></span> |-->
-                <!--Rola: <span sec:authentication="principal.authorities"></span> |-->
-            <!--</span>-->
 
-            <script type="text/javascript"
-                    src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+            <!--<script type="text/javascript"-->
+                    <!--src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
 
         </footer>
     </div>

@@ -20,7 +20,8 @@
         <h1>Nowa faktura sprzedaży</h1>
 
         <div th:if="${error} != null">
-            <div class="alert alert-info">
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                 <span th:text="${error}"></span>
             </div>
         </div>

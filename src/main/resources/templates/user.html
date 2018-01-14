@@ -2,11 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="fragments/header :: header-css"/>
+    <!--<script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
     <title>Księgowość online</title>
 </head>
 <body>
 
 <div th:replace="fragments/header :: header"/>
+
 
 <div class="container">
 
@@ -14,9 +16,10 @@
         <h1>Księgowość online</h1>
 
         <!--<h1 th:inline="text">Witaj [[${#httpServletRequest.remoteUser}]]!</h1>-->
-        <h1 th:if="${person} != null">Witaj <span th:text="${person}"></span>!</h1>
+        <h2 th:if="${person} != null"><span th:text="${person}"></span>, witaj na naszej stronie!</h2>
         <div th:if="${error} != null">
-            <div class="alert alert-info">
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                 <span th:text="${error}"></span>
             </div>
         </div>

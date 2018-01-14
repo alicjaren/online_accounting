@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="fragments/header :: header-css"/>
+    <div th:replace="fragments/header_admin :: header-css"/>
     <title>Lista użytkowników</title>
 </head>
 <body>
@@ -11,27 +11,46 @@
 <div class="container">
 
     <div class="starter-template">
-        <h1>Admin page</h1>
+
+        <div th:if="${error} != null">
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span th:text="${error}"></span>
+            </div>
+        </div>
+
+        <div th:if="${result} != null">
+            <div class="alert alert-success">
+                <span th:text="${result}"></span>
+            </div>
+        </div>
+
 
         <div th:if="${not #lists.isEmpty(persons)}">
-            <h1>Lista użytkowników</h1>
-            <table class="persons-table">
+            <h2>Lista użytkowników</h2>
+            <table class="table">
+                <thead class="thead-dark">
                 <tr>
-                    <th>Login</th>
-                    <th>Imiona</th>
-                    <th>Nazwisko</th>
+                    <th scope="col">Login</th>
+                    <th scope="col">Imiona</th>
+                    <th scope="col">Nazwisko</th>
+                    <th scope="col">Usuwanie</th>
                 </tr>
+                </thead>
                 <tr th:each="person: ${persons}">
                     <td th:text="${person.username}"></td>
                     <td th:text="${person.name}"></td>
                     <td th:text="${person.surname}"></td>
+                    <td>
+                        <form th:action="@{/admin/user/deleting}" method="post">
+                            <input type="hidden" name="username" th:attr="value = ${person.username}" />
+                            <input type="submit" class="btn btn-danger" value="Usuń"/>
+                        </form>
+
+                    </td>
                 </tr>
             </table>
         </div>
-
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
-        </form>
 
     </div>
 

@@ -21,3 +21,8 @@ INSERT INTO test.persons(username, name, surname, address, email, NIP, phone_num
                          name_of_revenue)
 VALUES('user2', 'Grzegorz Marian', 'Kozieł-Bartosz', 'ul. Nowa 32 06-400 Ciechanów',
        'koziel_bartosz@wp.pl', '1234567890', '123456789', '1998/12/01', 'Urząd Skarbowy w Ciechanowie');
+
+INSERT INTO test.persons(username, name, surname, address, email, NIP, phone_number, date_of_birth,
+                         name_of_revenue)
+VALUES('user1', 'Grzegorz', 'Kowalski', 'ul. Nowa 32 06-400 Ciechanów',
+       'kowalski@wp.pl', '1234567888', '123456789', '1998/12/01', 'Urząd Skarbowy w Ciechanowie');

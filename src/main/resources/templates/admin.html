@@ -1,7 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="fragments/header :: header-css"/>
+    <div th:replace="fragments/header_admin :: header-css"/>
+    <script src="webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <title>Księgowość online</title>
 </head>
 <body>
@@ -11,20 +12,23 @@
 <div class="container">
 
     <div class="starter-template">
-        <h1>Strona administratora</h1>
+        <h1>Strona administratora systemu</h1>
 
         <h1 th:inline="text">Witaj [[${#httpServletRequest.remoteUser}]]!</h1>
 
         <div th:if="${addedUser} != null">
-            <div class="alert alert-info">
+            <div class="alert alert-success">
                 <span th:text="${addedUser}"></span>
             </div>
         </div>
+
         <div th:if="${failedAdded} != null">
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                 <span th:text="${failedAdded}"></span>
             </div>
         </div>
+
 
         <div th:if="${result} != null">
             <div class="alert alert-info">
@@ -32,9 +36,6 @@
             </div>
         </div>
 
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
-        </form>
 
     </div>
 
