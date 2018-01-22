@@ -21,7 +21,7 @@ public class PurchaseRecord {
     private double sumVat8;
     private double sumVat5;
     private double sumGross;
-    private double sumFixedAssetsNet;//TODO
+    private double sumFixedAssetsNet;
     private double sumFixedAssetsVat;
     private double sumFixedAssetsGross;
     private Set<PurchaseInvoice> purchaseInvoices = new HashSet<>();
